@@ -1,0 +1,405 @@
+{
+  "schema_version": "v8-evidence-1",
+  "candidate": {
+    "label": "V8 divergence-gated third-Yarn milk routing",
+    "main_sha256": "faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3",
+    "base_v7_main_sha256": "7ce060d8551cf3e7a20a800c1eea2e18ece63d6d6eab8e21199b65f9b78e4794",
+    "behavioral_change": "For current non-legacy third-Yarn prefixes with milk support in the first two shops, select 10C/4S when the public six-count farm L1 distance is at least three; otherwise retain 6C/8S.",
+    "forbidden_features_absent": [
+      "opponent_identity",
+      "episode_id",
+      "submission_id",
+      "random_seed",
+      "private_opponent_state",
+      "future_opponent_actions",
+      "replay_lookup"
+    ],
+    "tests_passed": 66,
+    "pip_check": "No broken requirements found",
+    "py_compile": true,
+    "starter_random_both_seats": {
+      "games": 4,
+      "seed": 20260805,
+      "states_each": 720,
+      "statuses_each": [
+        "DONE",
+        "DONE"
+      ],
+      "stderr_empty": true
+    }
+  },
+  "remote_snapshot": {
+    "retrieved_at_utc": "2026-08-23T15:45:18Z",
+    "competition": "kaggriculture",
+    "v7_submission_id": 55638354,
+    "v7_status": "COMPLETE",
+    "v7_public_score": 2626.4,
+    "leaderboard": {
+      "team": "ziliangCok",
+      "rank": 53,
+      "team_count": 6021,
+      "zip_sha256": "78b56f62fa43ff2f97604a9c6e856b6de64092eb24ded5a1c22f368cd18dea74"
+    },
+    "submissions_json_sha256": "d71a4949e3a077bb52170590281936ace354b4077dbc118e9bab10dc3c2ac574",
+    "score_and_rank_are_dynamic_snapshots": true
+  },
+  "public_replay_corpus": {
+    "source_submission_id": 55638354,
+    "api_episode_rows": 201,
+    "public_games": 200,
+    "wins": 140,
+    "ties": 1,
+    "losses": 59,
+    "engine_partitions": {
+      "1.32.7": 200
+    },
+    "download_failures": 0,
+    "episode_manifest_sha256": "1b9010db2965ad2818c565b732e3f6177a50d69f8bd9626b39a3ffc3204ea4ee",
+    "download_selection_sha256": "a4904e1f405f910f475310bc00a4d04f9733042e15adcbe5a2eac72f560c2ea3",
+    "download_manifest_sha256": "faff373c7e9aff80e1e9ed833554a01fbe7a7cfef55da85c227a1a12f329a278",
+    "frozen_v7_source_manifest_sha256": "f173999455cfd1506cec7087df5f8c4f021f217be06d89b4c531d4a95203c32a"
+  },
+  "public_replay_failure_analysis": {
+    "reproduction_integrity": {
+      "gameplay_frame_equivalent_exact": 200,
+      "raw_json_frame_exact": 187,
+      "raw_json_variant_but_gameplay_exact_episode_ids": [
+        94965714,
+        95038925,
+        95301689,
+        95417928,
+        95721219,
+        96184480,
+        96517349,
+        96946300,
+        97048978,
+        97099041,
+        97292901,
+        97374953,
+        97578161
+      ],
+      "raw_json_difference": "remainingOverageTime only",
+      "v7_action_trace_exact": 200,
+      "metadata_rewards_match": 200,
+      "market_cashflow_residual_zero": 200,
+      "recorded_and_reproduced_done_done": 200
+    },
+    "loss_margin": {
+      "games": 59,
+      "mean": -5721.830508474576,
+      "median": -2597.0,
+      "best": -48.0,
+      "worst": -35604.0
+    },
+    "loss_route_groups": [
+      {
+        "route": "current:10c4s_3q",
+        "games": 26,
+        "mean_margin": -4841.7307692307695,
+        "worst_margin": -18169.0
+      },
+      {
+        "route": "current:6c8s_3q",
+        "games": 15,
+        "mean_margin": -11790.066666666668,
+        "worst_margin": -35604.0
+      },
+      {
+        "route": "current:8c6s_3q",
+        "games": 7,
+        "mean_margin": -2377.1428571428573,
+        "worst_margin": -6373.0
+      },
+      {
+        "route": "current:6c12s_4q_second_yarn",
+        "games": 5,
+        "mean_margin": -1905.2,
+        "worst_margin": -3576.0
+      },
+      {
+        "route": "current:6c12s_4q_first_yarn",
+        "games": 4,
+        "mean_margin": -1365.75,
+        "worst_margin": -3433.0
+      },
+      {
+        "route": "legacy:10c4s_3q",
+        "games": 2,
+        "mean_margin": -1611.5,
+        "worst_margin": -2109.0
+      }
+    ],
+    "primary_product_revenue_gap_clusters": [
+      {
+        "product": "WOOL",
+        "games": 14,
+        "mean_margin": -2198.785714285714,
+        "mean_primary_revenue_gap": -1857.9285714285713
+      },
+      {
+        "product": "STRAWBERRY",
+        "games": 12,
+        "mean_margin": -3933.25,
+        "mean_primary_revenue_gap": -6594.083333333333
+      },
+      {
+        "product": "WHEAT",
+        "games": 11,
+        "mean_margin": -7757.090909090909,
+        "mean_primary_revenue_gap": -13503.545454545454
+      },
+      {
+        "product": "MILK",
+        "games": 9,
+        "mean_margin": -10554.111111111111,
+        "mean_primary_revenue_gap": -7580.777777777777
+      },
+      {
+        "product": "TOMATO",
+        "games": 6,
+        "mean_margin": -8248.333333333334,
+        "mean_primary_revenue_gap": -11100.5
+      },
+      {
+        "product": "CARROT",
+        "games": 4,
+        "mean_margin": -3025.75,
+        "mean_primary_revenue_gap": -6085.75
+      },
+      {
+        "product": "EGG",
+        "games": 2,
+        "mean_margin": -7097.0,
+        "mean_primary_revenue_gap": -3310.5
+      },
+      {
+        "product": "MELON",
+        "games": 1,
+        "mean_margin": -3504.0,
+        "mean_primary_revenue_gap": -3402.0
+      }
+    ],
+    "terminal_sale_revenue_deficit": {
+      "games": 57,
+      "mean_margin": -5870.298245614035,
+      "mean_revenue_gap": -3260.40350877193
+    },
+    "actionable_cluster": "Current 6C/8S third-Yarn prefixes with milk support in the first two shops and a visibly divergent public farm layout.",
+    "rejected_hypothesis": "A blanket third-Yarn plus milk-support switch regressed a near-mirror V7 win; public farm divergence and a legacy exclusion were required.",
+    "summary_sha256": "81cd864cacdaed3d6162fb3c80c26259a64e592058962e7e3c92d865abe84033",
+    "replay_analysis_manifest_sha256": "b9aedb31776a3742c561f9c17400250904c6968acc24465ae66be23316241a32",
+    "claim_boundary": "Revenue and timing clusters are observational features of exact recorded action traces. They motivate a hypothesis but do not prove a closed-loop causal improvement."
+  },
+  "full_fixed_tape_gate": {
+    "engine": "kaggle-environments==1.32.7",
+    "games": 200,
+    "baseline_calibration_exact": true,
+    "v7": {
+      "wins": 140,
+      "ties": 1,
+      "losses": 59,
+      "mean_margin": 3236.64
+    },
+    "v8": {
+      "wins": 145,
+      "ties": 1,
+      "losses": 54,
+      "mean_margin": 4058.725
+    },
+    "v7_online_wins_tested": 140,
+    "v7_online_wins_preserved": 140,
+    "improved_rows": 9,
+    "unchanged_rows": 191,
+    "regressed_rows": 0,
+    "losses_flipped_to_wins": [
+      94931386,
+      94958840,
+      95006920,
+      95050369,
+      95883295
+    ],
+    "mean_margin_delta_vs_v7": 822.085,
+    "all_clean_terminal": true,
+    "result_sha256": "179c8e56ed16b577bcb602669f9ed3833b064dd377785c762ed0c85e2a49989e",
+    "gate_script_sha256": "e5d9d43dd8c842c029fa18041f490783835035c60bfff9c2fc7bd22dbf5590e0",
+    "matrix_script_sha256": "287362265a6b4d9942a6a01b05f657ee671e7ecfd0e82c04f9264a2548efd664",
+    "claim_boundary": "Fixed-opponent-action counterfactual. It proves preservation on the captured tapes, not a closed-loop rematch or a leaderboard rating."
+  },
+  "targeted_closed_loop_panel": {
+    "engine": "kaggle-environments==1.32.7",
+    "both_seats": true,
+    "seeds": [
+      1256243770,
+      669065720,
+      2051542963,
+      1558966404,
+      231041902,
+      1309252721,
+      1534471298,
+      248386518,
+      1087434944,
+      1487517523,
+      103586870
+    ],
+    "opponents": [
+      {
+        "name": "v21",
+        "main_sha256": "c6f96a8521dc9aa369b6f27e5b36b9d481e5c1688f50c8ca215c3bb53f1f9eb8",
+        "v7_wins": 19,
+        "v7_losses": 3,
+        "v7_mean_margin": 2681.3636363636365,
+        "v8_wins": 19,
+        "v8_losses": 3,
+        "v8_mean_margin": 2681.3636363636365
+      },
+      {
+        "name": "v17",
+        "main_sha256": "ccf2aefdadd600d3e6fcaad2879a310eb15bbd14183fc2deeff9bb2525697b9a",
+        "v7_wins": 8,
+        "v7_losses": 14,
+        "v7_mean_margin": -6570.636363636364,
+        "v8_wins": 22,
+        "v8_losses": 0,
+        "v8_mean_margin": 4164.954545454545
+      },
+      {
+        "name": "tetsu_adaptive",
+        "main_sha256": "c26402b67a0d04a46348353069645b1a49c3cb3df6df69d7fa35d8adbbdbeae4",
+        "v7_wins": 21,
+        "v7_losses": 1,
+        "v7_mean_margin": 3958.318181818182,
+        "v8_wins": 21,
+        "v8_losses": 1,
+        "v8_mean_margin": 3958.318181818182
+      },
+      {
+        "name": "public_demand_moe",
+        "main_sha256": "d39dba50793d9777c990347443bf0c481c78adaea86055f6f6b0600dcfcd9f2e",
+        "v7_wins": 8,
+        "v7_losses": 14,
+        "v7_mean_margin": -6570.636363636364,
+        "v8_wins": 22,
+        "v8_losses": 0,
+        "v8_mean_margin": 4164.954545454545
+      }
+    ],
+    "games_per_candidate": 88,
+    "v7_total_wins": 56,
+    "v7_total_losses": 32,
+    "v8_total_wins": 84,
+    "v8_total_losses": 4,
+    "v7_win_regressions": 0,
+    "improved_rows": 28,
+    "unchanged_rows": 60,
+    "regressed_rows": 0,
+    "mean_margin_delta": 5367.795454545455,
+    "all_clean_terminal": true,
+    "v7_result_sha256": "ffbfe44ca7b0a85404499916d0df9001520b2940ea996381a66511d0abf3f5a0",
+    "v8_result_sha256": "6918e806aeaa1aefa9a095286ad4f0bc2c59633183f3b5fc424f6f2faf9bd33d",
+    "claim_boundary": "Closed-loop evidence for these four hash-pinned artifacts, eleven trigger seeds, and both seats only."
+  },
+  "fresh_closed_loop_panel": {
+    "engine": "kaggle-environments==1.32.7",
+    "both_seats": true,
+    "seeds": [
+      2026082301,
+      2026082302,
+      2026082303,
+      2026082304,
+      2026082305,
+      2026082306,
+      2026082307,
+      2026082308
+    ],
+    "opponents": [
+      {
+        "name": "kaito_v42",
+        "main_sha256": "bea1dadf9947414e35493e56d0b4f57acb7236e55384249bb83a3dbb0c265919",
+        "games": 16,
+        "wins": 12,
+        "losses": 4,
+        "mean_margin": 553.6875
+      },
+      {
+        "name": "tetsu_adaptive",
+        "main_sha256": "c26402b67a0d04a46348353069645b1a49c3cb3df6df69d7fa35d8adbbdbeae4",
+        "games": 16,
+        "wins": 16,
+        "losses": 0,
+        "mean_margin": 2504.9375
+      },
+      {
+        "name": "tetsu_town",
+        "main_sha256": "73834889054bb6a515fbb40a306a7e0e609105049c781e32197a205f6c339c4f",
+        "games": 16,
+        "wins": 16,
+        "losses": 0,
+        "mean_margin": 2502.3125
+      },
+      {
+        "name": "v21",
+        "main_sha256": "c6f96a8521dc9aa369b6f27e5b36b9d481e5c1688f50c8ca215c3bb53f1f9eb8",
+        "games": 16,
+        "wins": 8,
+        "losses": 8,
+        "mean_margin": 2321.3125
+      },
+      {
+        "name": "public_demand_moe",
+        "main_sha256": "d39dba50793d9777c990347443bf0c481c78adaea86055f6f6b0600dcfcd9f2e",
+        "games": 16,
+        "wins": 15,
+        "losses": 1,
+        "mean_margin": 6223.0625
+      },
+      {
+        "name": "v17",
+        "main_sha256": "ccf2aefdadd600d3e6fcaad2879a310eb15bbd14183fc2deeff9bb2525697b9a",
+        "games": 16,
+        "wins": 15,
+        "losses": 1,
+        "mean_margin": 11883.75
+      }
+    ],
+    "games_per_candidate": 96,
+    "v7_wins": 82,
+    "v7_losses": 14,
+    "v8_wins": 82,
+    "v8_losses": 14,
+    "margin_identical_rows": 96,
+    "improved_rows": 0,
+    "regressed_rows": 0,
+    "all_opponent_means_positive": true,
+    "all_clean_terminal": true,
+    "v7_result_sha256": "f862f0bd37d59d74de5d4e008318a32af8e1670a7323d8ebcdd480d7a48dde07",
+    "v8_result_sha256": "12abc5fa629645795f67e6f060edaed5e850323a52bb71915ed95e54091d3add",
+    "claim_boundary": "Fresh closed-loop regression evidence for these six hash-pinned artifacts and eight seeds only; it is not universal dominance."
+  },
+  "provenance": {
+    "notice": "THIRD_PARTY_NOTICES.md",
+    "route_data_change_in_v8": false,
+    "selector_change_independently_implemented": true,
+    "public_replay_identity_inference": false
+  },
+  "delivery": {
+    "state": "locally_ready_not_uploaded",
+    "git_commit": null,
+    "github_main_pushed": false,
+    "archive_size_bytes": 99945,
+    "archive_sha256": "5c410ffb2a3637ce8840274c7eab70813c270209cbcbb79e735eb2c547a4b35d",
+    "archive_reproducible_builds": 2,
+    "archive_members": [
+      "main.py",
+      "LICENSE-APACHE-2.0.txt",
+      "THIRD_PARTY_NOTICES.txt"
+    ],
+    "kaggle_submission_id": null,
+    "kaggle_message": null,
+    "submitted_at_utc": null,
+    "remote_validation": null,
+    "validation_observed_at_utc": null,
+    "initial_public_score": null,
+    "score_is_dynamic_snapshot": true
+  },
+  "global_claim_boundary": "The fixed-tape and paired closed-loop gates preserve all observed V7 wins and show targeted gains, but no finite local evaluation can guarantee a nondecreasing dynamic Kaggle rating against future matchmaking and opponents."
+}

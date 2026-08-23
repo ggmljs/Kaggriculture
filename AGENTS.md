@@ -211,7 +211,7 @@ submission validation.
 - Its initial public score was `600.0` at `2026-08-17T08:58:58Z`; leaderboard
   ratings are dynamic and this is only a delivery snapshot.
 
-### V6: observable behavior-routed counter expert — 2026-08-18 (current)
+### V6: observable behavior-routed counter expert — 2026-08-18
 
 - Retrieved the real V5 public score of `2735.4` and evaluated 97 captured
   public games under engine `1.32.7`: V5 won 73/97, with all 24 losses reaching
@@ -281,6 +281,40 @@ submission validation.
   `2026-08-20T04:56:38.653Z`; validation was observed complete at
   `2026-08-20T05:02:19Z` with an initial dynamic public score of `600.0`. V7
   was later observed at `681.7` on `2026-08-20T05:05:16Z`.
+
+### V8: divergence-gated third-Yarn milk routing — 2026-08-23 (current)
+
+- Pulled the latest V7 remote snapshot at `2026-08-23T15:45:18Z`: submission
+  `55638354` remained `COMPLETE` at dynamic score `2626.4`, while the
+  leaderboard placed `ziliangCok` at rank 53/6,021. Retrieved all 200 public
+  episodes: 140 wins, 59 losses, and one tie, all terminal `DONE/DONE`.
+- The dominant deep-loss route was current 6C/8S: 15 losses with mean margin
+  `-11790.067` and worst margin `-35604`. The repeated actionable subcluster
+  was third-shop Yarn after an earlier milk-support shop, where V7's Yarn
+  priority suppressed the existing 10C/4S milk expert.
+- Kept all ten V7 tapes and execution controls. For current, non-legacy
+  third-Yarn plus first-two milk support only, V8 computes an L1 distance over
+  the two public farms' cow, sheep, wheat, melon, strawberry, and empty-pasture
+  counts. Distance at least three selects 10C/4S; otherwise 6C/8S remains.
+  The decision is sticky, per-seat, reset-safe, and uses no identity, episode,
+  submission, seed, private inventory, or future-action feature.
+- Frozen `main.py` SHA-256 is
+  `faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3`.
+  The repository has 66 passing tests. Starter and random both-seat smokes each
+  completed 720 states with `DONE/DONE` and no stderr.
+- A calibrated 200-game fixed-opponent-tape gate retained all 140 V7 wins,
+  improved nine rows, regressed zero, and flipped five losses. V8 scored
+  145 wins, one tie, and 54 losses with mean margin `+4058.725`, versus V7's
+  140/1/59 and `+3236.640`. This is open-loop counterfactual evidence.
+- A final-hash targeted closed-loop panel improved from V7's 56/88 to V8's
+  84/88, with 28 improved and 60 identical rows, zero regressions, and all
+  games cleanly terminal. A separate fresh six-opponent, eight-seed, both-seat
+  panel was margin-identical to V7 on all 96 rows at 82/96 wins, with a
+  positive mean versus every opponent. See `docs/v8-strategy.md` and
+  `docs/evidence/v8-failure-analysis.json` for hashes, seeds, and claim limits.
+- V8 delivery is pending the user-authorized same-cycle GitHub `main` push and
+  Kaggle upload. Record the final Git commit, archive hash, submission ID,
+  remote status, timestamp, and dynamic score here after remote validation.
 
 ## Verification Gates
 

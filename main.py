@@ -970,9 +970,28 @@ def _meta_front_run(action, obs, step, state):
 
 
 _V7_MILK_SUPPORT = {"PIZZA_SHOP", "ICE_CREAM_SHOP", "SMOOTHIE_SHOP"}
+_V8_ECONOMIC_TILES = (
+    "COW",
+    "SHEEP",
+    "WHEAT",
+    "MELON",
+    "STRAWBERRY",
+    "PASTURE",
+)
+_V8_ROUTE_DISTANCE_THRESHOLD = 3
 _ROUTE_STATE = {
-    0: {"last_step": -1, "legacy": None, "label": None},
-    1: {"last_step": -1, "legacy": None, "label": None},
+    0: {
+        "last_step": -1,
+        "legacy": None,
+        "label": None,
+        "third_yarn_milk": None,
+    },
+    1: {
+        "last_step": -1,
+        "legacy": None,
+        "label": None,
+        "third_yarn_milk": None,
+    },
 }
 _ACTION_CACHE = {
     0: {"step": -1, "signature": None, "action": None},
@@ -1003,6 +1022,51 @@ def _v7_route_label(obs):
     if _V7_MILK_SUPPORT.intersection(shops[:3]):
         return "10c4s_3q"
     return "8c6s_3q"
+
+
+def _v8_economic_tile_counts(farm):
+    counts = Counter()
+    for row in list(_get(farm, "tiles", []) or []):
+        for tile in list(row or []):
+            if not isinstance(tile, dict):
+                continue
+            animal = tile.get("animal")
+            crop = tile.get("crop")
+            if animal in ("COW", "SHEEP"):
+                counts[animal] += 1
+            elif crop in ("WHEAT", "MELON", "STRAWBERRY"):
+                counts[crop] += 1
+            elif tile.get("kind") == "PASTURE" and not animal:
+                counts["PASTURE"] += 1
+    return counts
+
+
+def _v8_public_route_distance(obs):
+    farms = list(_get(obs, "farms", []) or [])
+    if len(farms) < 2:
+        return 0
+    seat = _seat(obs)
+    own = _v8_economic_tile_counts(farms[seat])
+    opponent = _v8_economic_tile_counts(farms[1 - seat])
+    return sum(abs(own[item] - opponent[item]) for item in _V8_ECONOMIC_TILES)
+
+
+def _v8_route_label(obs, state):
+    label = _v7_route_label(obs)
+    if label != "6c8s_3q" or state.get("legacy"):
+        return label
+    shops = list(_get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or [])
+    if not _V7_MILK_SUPPORT.intersection(shops[:2]):
+        return label
+    decision = state.get("third_yarn_milk")
+    if decision is None:
+        decision = (
+            "10c4s_3q"
+            if _v8_public_route_distance(obs) >= _V8_ROUTE_DISTANCE_THRESHOLD
+            else label
+        )
+        state["third_yarn_milk"] = decision
+    return decision
 
 
 def _v7_legacy_layout(obs):
@@ -1072,12 +1136,17 @@ def _select_route(obs, step):
     seat = _seat(obs)
     state = _ROUTE_STATE[seat]
     if step == 0 or step < int(state.get("last_step", -1)):
-        state = {"last_step": step, "legacy": None, "label": None}
+        state = {
+            "last_step": step,
+            "legacy": None,
+            "label": None,
+            "third_yarn_milk": None,
+        }
         _ROUTE_STATE[seat] = state
     state["last_step"] = step
     if state.get("legacy") is None and 24 <= step < 72:
         state["legacy"] = _v7_legacy_layout(obs)
-    state["label"] = _v7_route_label(obs)
+    state["label"] = _v8_route_label(obs, state)
     label = state["label"]
     if state.get("legacy"):
         return _V7_LEGACY_ROUTES[label], _V7_LEGACY_SALES[label]

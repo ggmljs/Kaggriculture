@@ -137,8 +137,18 @@ def reset_controller():
     submission._ROUTE_STATE.clear()
     submission._ROUTE_STATE.update(
         {
-            0: {"last_step": -1, "legacy": None, "label": None},
-            1: {"last_step": -1, "legacy": None, "label": None},
+            0: {
+                "last_step": -1,
+                "legacy": None,
+                "label": None,
+                "third_yarn_milk": None,
+            },
+            1: {
+                "last_step": -1,
+                "legacy": None,
+                "label": None,
+                "third_yarn_milk": None,
+            },
         }
     )
     submission._FR_STATE.clear()
@@ -402,6 +412,145 @@ def test_third_shop_can_refine_route_before_the_shared_prefix_diverges():
         submission._ACTIONS_8C6S_3Q[:216]
         == submission._ACTIONS_10C4S_3Q[:216]
     )
+    assert (
+        submission._ACTIONS_6C8S_3Q[:216]
+        == submission._ACTIONS_10C4S_3Q[:216]
+    )
+
+
+def _set_public_economic_tiles(obs, farm_index, tiles):
+    farm_tiles = obs["farms"][farm_index]["tiles"]
+    for index, tile in enumerate(tiles):
+        farm_tiles[index // 10][index % 10] = deepcopy(tile)
+
+
+def test_third_yarn_milk_route_uses_public_farm_divergence():
+    reset_controller()
+    obs = make_observation(
+        step=216,
+        shops=["ICE_CREAM_SHOP", "BRUNCH_SPOT", "YARN_STORE"],
+    )
+    _set_public_economic_tiles(
+        obs,
+        1,
+        [
+            {"kind": "PASTURE", "animal": "COW"},
+            {"kind": "PASTURE", "animal": "COW"},
+            {"kind": "PASTURE", "animal": "COW"},
+        ],
+    )
+
+    route, sales = submission._select_route(obs, 216)
+
+    assert submission._v8_public_route_distance(obs) == 3
+    assert route is submission._ACTIONS_10C4S_3Q
+    assert sales is submission._V7_CURRENT_SALES["10c4s_3q"]
+
+
+def test_public_route_distance_does_not_count_occupied_goose_pasture_as_empty():
+    obs = make_observation(step=216)
+    _set_public_economic_tiles(
+        obs,
+        1,
+        [{"kind": "PASTURE", "animal": "GOOSE"}],
+    )
+
+    assert submission._v8_public_route_distance(obs) == 0
+
+
+def test_third_yarn_milk_route_keeps_near_mirror_and_sticks_per_seat():
+    reset_controller()
+    shops = ["SMOOTHIE_SHOP", "PET_CAFE", "YARN_STORE"]
+    mirrored = make_observation(step=216, player=0, shops=shops)
+    assert (
+        submission._select_route(mirrored, 216)[0]
+        is submission._ACTIONS_6C8S_3Q
+    )
+
+    diverged = make_observation(step=217, player=0, shops=shops)
+    _set_public_economic_tiles(
+        diverged,
+        1,
+        [
+            {"kind": "PASTURE", "animal": "COW"},
+            {"kind": "PASTURE", "animal": "COW"},
+            {"kind": "PASTURE", "animal": "COW"},
+        ],
+    )
+    assert (
+        submission._select_route(diverged, 217)[0]
+        is submission._ACTIONS_6C8S_3Q
+    )
+
+    other_seat = make_observation(step=216, player=1, shops=shops)
+    _set_public_economic_tiles(
+        other_seat,
+        0,
+        [
+            {"kind": "PASTURE", "animal": "COW"},
+            {"kind": "PASTURE", "animal": "COW"},
+            {"kind": "PASTURE", "animal": "COW"},
+        ],
+    )
+    assert (
+        submission._select_route(other_seat, 216)[0]
+        is submission._ACTIONS_10C4S_3Q
+    )
+
+    reset_obs = make_observation(step=0, player=0)
+    submission._select_route(reset_obs, 0)
+    assert submission._ROUTE_STATE[0]["third_yarn_milk"] is None
+
+
+def test_third_yarn_milk_route_does_not_modify_legacy_routing():
+    reset_controller()
+    obs = make_legacy_observation(
+        step=216,
+        shops=["SMOOTHIE_SHOP", "PIZZA_SHOP", "YARN_STORE"],
+    )
+    _set_public_economic_tiles(
+        obs,
+        1,
+        [
+            {"kind": "PASTURE", "animal": "COW"},
+            {"kind": "PASTURE", "animal": "COW"},
+            {"kind": "PASTURE", "animal": "COW"},
+        ],
+    )
+    submission._ROUTE_STATE[0]["legacy"] = True
+
+    route, sales = submission._select_route(obs, 216)
+
+    assert route is submission._LEGACY_ACTIONS_6C8S_3Q
+    assert sales is submission._V7_LEGACY_SALES["6c8s_3q"]
+    assert submission._ROUTE_STATE[0]["third_yarn_milk"] is None
+
+
+def test_third_yarn_milk_route_ignores_private_and_identity_metadata():
+    labels = []
+    for seed, secret in ((11, 1), (987654321, 999)):
+        reset_controller()
+        obs = make_observation(
+            step=216,
+            shops=["PIZZA_SHOP", "BRUNCH_SPOT", "YARN_STORE"],
+            shed={"MILK": secret},
+        )
+        obs["seed"] = seed
+        obs["opponent_name"] = f"opponent-{secret}"
+        obs["EpisodeId"] = seed + 100
+        _set_public_economic_tiles(
+            obs,
+            1,
+            [
+                {"kind": "PASTURE", "animal": "COW"},
+                {"kind": "PASTURE", "animal": "COW"},
+                {"kind": "PASTURE", "animal": "COW"},
+            ],
+        )
+        submission._select_route(obs, 216)
+        labels.append(submission._ROUTE_STATE[0]["label"])
+
+    assert labels == ["10c4s_3q", "10c4s_3q"]
 
 
 def test_route_selection_ignores_identity_metadata():

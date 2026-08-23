@@ -4,7 +4,7 @@
 
 `main.py` contains ten compressed, re-serialized public-shop action routes
 derived from the Apache-2.0 Adaptive Farming Strategy artifact identified
-below and connected to the V7 controller. Five are current routes and five are
+below and connected to the V8 controller. Five are current routes and five are
 legacy fallback routes selected by observable shop prefixes and farm state:
 
 - current: `10c4s_3q`, `8c6s_3q`, `6c8s_3q`,
@@ -60,8 +60,9 @@ as mechanism references and used as hash-pinned local opponents:
   `483a72e47bfe8e34af4b4858f252b3f3a9221f3cdf47bfba174929146f3ba381`
 - the older artifact remains the recorded mechanism source for the published
   product price-curve parameters and requested-sale impact-ranking idea;
-- V7 inspects the 2026-08-20 artifact for adaptive route, preemption, and room
-  safety mechanisms. Its five current routes, five legacy routes, and related
+- V8 retains V7's inspection of the 2026-08-20 artifact for adaptive route,
+  preemption, and room safety mechanisms. Its five current routes, five legacy
+  routes, and related
   mechanisms were modified, made deterministic, and integrated into the V6
   execution controller; this repository does not claim byte-for-byte copying
   of the Notebook's full policy or route.
@@ -75,9 +76,9 @@ These downloads support artifact-level inspection and local evaluation only.
 Similar behavior in a public episode is not proof that the episode executed
 the downloaded bytes.
 
-## Retained V7 controller lineage
+## Retained V8 controller lineage
 
-V7 retains controller and market-schedule lineage previously attributed to:
+V8 retains controller and market-schedule lineage previously attributed to:
 
 - [V16-RC5-R5A High-Score 8C/4S Recovery](https://www.kaggle.com/code/boatlee/v16-rc5-r5a-high-score-8c-4s-recovery),
   reference `main.py` SHA-256
@@ -86,13 +87,15 @@ V7 retains controller and market-schedule lineage previously attributed to:
   reference `main.py` SHA-256
   `df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5`.
 
-The earlier 8C/4S action tape is no longer the sole current V7 production
-route. V7 retains bounded weed and cow-placement repair plus the reduced public
+The earlier 8C/4S action tape is no longer the sole current V8 production
+route. V8 retains bounded weed and cow-placement repair plus the reduced public
 premium-sale schedule, then adds the five current/five legacy shop routes,
 public-state route selection, route-aware purchase reconciliation,
 quantity-conserving repayment, modified preemption and room-safety controls,
 malformed observation protection, retry-safe action caching, tests, packaging,
-and evidence controls.
+and evidence controls. V8's new third-Yarn milk-support decision is an
+independently implemented selector over public farm counts; it does not add or
+modify third-party route data.
 
 ## License copy and distribution
 
