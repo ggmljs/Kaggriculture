@@ -282,7 +282,7 @@ submission validation.
   `2026-08-20T05:02:19Z` with an initial dynamic public score of `600.0`. V7
   was later observed at `681.7` on `2026-08-20T05:05:16Z`.
 
-### V8: divergence-gated third-Yarn milk routing — 2026-08-23 (current)
+### V8: divergence-gated third-Yarn milk routing — 2026-08-24 (current)
 
 - Pulled the latest V7 remote snapshot at `2026-08-23T15:45:18Z`: submission
   `55638354` remained `COMPLETE` at dynamic score `2626.4`, while the
@@ -312,9 +312,16 @@ submission validation.
   panel was margin-identical to V7 on all 96 rows at 82/96 wins, with a
   positive mean versus every opponent. See `docs/v8-strategy.md` and
   `docs/evidence/v8-failure-analysis.json` for hashes, seeds, and claim limits.
-- V8 delivery is pending the user-authorized same-cycle GitHub `main` push and
-  Kaggle upload. Record the final Git commit, archive hash, submission ID,
-  remote status, timestamp, and dynamic score here after remote validation.
+- Kaggle submission `55719179`, message
+  `v8 divergence-gated third-yarn milk 779caae`, reached `COMPLETE`; the
+  uploaded `main.py` maps to public Git commit
+  `779caaec88a441345871e2d62eb5de93606b7b52`. The reviewed 99,945-byte
+  archive SHA-256 is
+  `5c410ffb2a3637ce8840274c7eab70813c270209cbcbb79e735eb2c547a4b35d`.
+  Kaggle recorded it at `2026-08-23T15:57:38.490Z`; validation was observed at
+  `2026-08-23T16:02:22Z` with initial dynamic score `600.0`. V7 remained
+  `COMPLETE / 2626.4` at that observation, so the prior remote baseline was not
+  overwritten while V8 began its own dynamic rating trajectory.
 
 ## Verification Gates
 

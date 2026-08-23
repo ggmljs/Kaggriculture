@@ -214,3 +214,14 @@ opponents, matchmaking, and rating updates change over time, and a new
 submission starts with its own remote rating trajectory. V7 remains a separate
 submitted artifact, while V8 is promoted only after preserving all captured
 V7 wins and improving both fixed-tape and closed-loop evidence.
+
+## Delivery
+
+The reviewed archive was submitted to Kaggle as submission `55719179` with
+message `v8 divergence-gated third-yarn milk 779caae`. It reached `COMPLETE`;
+the uploaded `main.py` maps to public Git commit
+`779caaec88a441345871e2d62eb5de93606b7b52`. Kaggle recorded the upload at
+`2026-08-23T15:57:38.490Z`, and validation was observed at
+`2026-08-23T16:02:22Z` with initial dynamic score `600.0`. V7 submission
+`55638354` remained `COMPLETE / 2626.4` at that observation. The new rating is
+an initial delivery snapshot and must not be read as the final strength of V8.

@@ -6,7 +6,7 @@
   [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
   [![Kaggle Environment](https://img.shields.io/badge/Kaggle-Environment-20BEFF?logo=kaggle&logoColor=white)](https://www.kaggle.com/competitions/kaggriculture)
   [![Tests](https://img.shields.io/badge/tests-66%20passing-2ea44f?logo=pytest&logoColor=white)](#-verified-current-strategy)
-  [![Submission status](https://img.shields.io/badge/V8%20submission-pending-f2a900?logo=kaggle&logoColor=white)](#-submission)
+  [![Submission status](https://img.shields.io/badge/V8%20submission-COMPLETE-2ea44f?logo=kaggle&logoColor=white)](#-submission)
   [![Policy](https://img.shields.io/badge/policy-V8%20divergence--gated-7B61FF)](#-strategy)
 
   **A deterministic public-demand-routed farm agent for Kaggle's 720-state economic simulation.**
@@ -125,12 +125,18 @@ tar -tzf dist/submission.tar.gz
 
 ## 📦 Submission
 
-V8 is locally frozen and has passed its promotion gates. Its Git commit,
-archive hash, Kaggle submission ID, and remote validation status will be
-recorded here only after the same-cycle GitHub push and Kaggle upload complete.
-Until then, the current remote artifact remains V7 submission `55638354`,
-which is `COMPLETE` and was observed at dynamic score **2626.4** on
-`2026-08-23T15:45:18Z`.
+V8 submission `55719179`, message
+`v8 divergence-gated third-yarn milk 779caae`, reached `COMPLETE`. The uploaded
+`main.py` maps to public Git commit
+[`779caae`](https://github.com/COK-ZhangZiliang/Kaggriculture/commit/779caaec88a441345871e2d62eb5de93606b7b52).
+
+The reviewed archive is 99,945 bytes with SHA-256
+`5c410ffb2a3637ce8840274c7eab70813c270209cbcbb79e735eb2c547a4b35d`.
+Kaggle recorded it at `2026-08-23T15:57:38.490Z`; validation was observed at
+`2026-08-23T16:02:22Z` with initial dynamic public score **600.0**. At that
+observation V7 submission `55638354` remained `COMPLETE / 2626.4`, preserving
+the existing remote baseline as V8 begins its own rating trajectory. These are
+dynamic delivery snapshots, not final strength estimates.
 
 The package contains only the self-contained entrypoint and the applicable
 Apache attribution files:

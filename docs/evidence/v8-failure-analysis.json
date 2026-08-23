@@ -419,9 +419,9 @@
     "public_replay_identity_inference": false
   },
   "delivery": {
-    "state": "locally_ready_not_uploaded",
-    "git_commit": null,
-    "github_main_pushed": false,
+    "state": "complete",
+    "git_commit": "779caaec88a441345871e2d62eb5de93606b7b52",
+    "github_main_pushed": true,
     "archive_size_bytes": 99945,
     "archive_sha256": "5c410ffb2a3637ce8840274c7eab70813c270209cbcbb79e735eb2c547a4b35d",
     "archive_reproducible_builds": 2,
@@ -430,12 +430,14 @@
       "LICENSE-APACHE-2.0.txt",
       "THIRD_PARTY_NOTICES.txt"
     ],
-    "kaggle_submission_id": null,
-    "kaggle_message": null,
-    "submitted_at_utc": null,
-    "remote_validation": null,
-    "validation_observed_at_utc": null,
-    "initial_public_score": null,
+    "kaggle_submission_id": 55719179,
+    "kaggle_message": "v8 divergence-gated third-yarn milk 779caae",
+    "submitted_at_utc": "2026-08-23T15:57:38.490Z",
+    "remote_validation": "COMPLETE",
+    "validation_observed_at_utc": "2026-08-23T16:02:22Z",
+    "initial_public_score": 600.0,
+    "v7_score_at_validation": 2626.4,
+    "v7_submission_still_complete": true,
     "score_is_dynamic_snapshot": true
   },
   "global_claim_boundary": "The fixed-tape and paired closed-loop gates preserve all observed V7 wins and show targeted gains, but no finite local evaluation can guarantee a nondecreasing dynamic Kaggle rating against future matchmaking and opponents."
