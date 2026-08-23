@@ -45,6 +45,17 @@ earlier milk-support shop. Several opponents visibly developed toward a
 market-cadence deficits. This is an observational cluster, not by itself a
 causal proof.
 
+The public-herd split explains why the correction must be conditional. Current
+6C/8S against a visible 10-cow/4-sheep herd was 0-6 with mean margin
+`-11019.833`, while current 6C/8S against another 6-cow/8-sheep herd was 8-6.
+Across all 59 losses, 57 had less realized sale revenue after step 672, with
+mean terminal revenue gap `-3260.404`. Aggregate realized sale deficits were
+largest for tomato (`-81089`), milk (`-78570`), strawberry (`-58021`), carrot
+(`-53619`), wool (`-39481`), and wheat (`-31028`); melon and fertilizer were
+already net-positive. V8 therefore changes route supply only for the public
+third-Yarn divergence cluster instead of adding a global liquidation or
+product-buy overlay.
+
 The final frozen-V7 replay audit covered all 200 public games. Raw replay JSON
 was byte-for-byte equivalent on 187/200. The thirteen exceptions differed only
 in Kaggle's nondeterministic `remainingOverageTime` runtime-budget field; after

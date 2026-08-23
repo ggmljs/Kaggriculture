@@ -184,10 +184,47 @@
       "mean_margin": -5870.298245614035,
       "mean_revenue_gap": -3260.40350877193
     },
+    "route_and_public_herd_findings": [
+      {
+        "route": "current:6c8s_3q",
+        "opponent_terminal_herd": "C10/S4/G0",
+        "wins": 0,
+        "losses": 6,
+        "mean_margin": -11019.833333333334
+      },
+      {
+        "route": "current:6c8s_3q",
+        "opponent_terminal_herd": "C6/S8/G0",
+        "wins": 8,
+        "losses": 6,
+        "interpretation": "The mixed outcome rejects a blanket replacement of all 6C/8S games."
+      },
+      {
+        "route": "current:10c4s_3q",
+        "opponent_terminal_herd": "C11/S4/G0",
+        "wins": 0,
+        "losses": 2,
+        "mean_margin": -13435.5
+      }
+    ],
+    "aggregate_realized_sales_revenue_gap_ours_minus_opponent": {
+      "TOMATO": -81089.0,
+      "MILK": -78570.0,
+      "STRAWBERRY": -58021.0,
+      "CARROT": -53619.0,
+      "WOOL": -39481.0,
+      "WHEAT": -31028.0,
+      "MELON": 61760.0,
+      "FERTILIZER": 30549.0
+    },
+    "extra_buy_product_cost_ours_minus_opponent": 96051.0,
     "actionable_cluster": "Current 6C/8S third-Yarn prefixes with milk support in the first two shops and a visibly divergent public farm layout.",
     "rejected_hypothesis": "A blanket third-Yarn plus milk-support switch regressed a near-mirror V7 win; public farm divergence and a legacy exclusion were required.",
     "summary_sha256": "81cd864cacdaed3d6162fb3c80c26259a64e592058962e7e3c92d865abe84033",
     "replay_analysis_manifest_sha256": "b9aedb31776a3742c561f9c17400250904c6968acc24465ae66be23316241a32",
+    "failure_plus_tie_summary_sha256": "add54796bc768bb42a845b2daad67e67345f9269a2b875e6e46bee9bcda1e322",
+    "failure_ledger_csv_sha256": "b56178c2199e001c2fdb21ff7404a57f5b3ebea6de7e02fe015c8d46adc39184",
+    "full_report_sha256": "8769423c382f934a801ca2909bdd344070ca76a0694476b8464f654f438e2728",
     "claim_boundary": "Revenue and timing clusters are observational features of exact recorded action traces. They motivate a hypothesis but do not prove a closed-loop causal improvement."
   },
   "full_fixed_tape_gate": {
