@@ -97,14 +97,19 @@ and evidence controls. V8's new third-Yarn milk-support decision is an
 independently implemented selector over public farm counts; it does not add or
 modify third-party route data.
 
-## License copy and distribution
+## Repository license and distribution
 
-The applicable Apache 2.0 license text is included at
+Except for third-party portions identified in this notice, this repository's
+independently written code and documentation are licensed under the Apache
+License, Version 2.0. The complete repository license is included at
+[`LICENSE`](LICENSE).
+
+The applicable Apache 2.0 text used for third-party attribution is also kept at
 [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt). The Kaggle submission
 archive carries this notice as `THIRD_PARTY_NOTICES.txt` and the same full
 license text as `LICENSE-APACHE-2.0.txt`, both at the archive root beside
 `main.py`.
 
-This notice covers the attributed third-party portions only. It does not set a
-license for the repository's independently written code or imply that public
-episode data itself is licensed under Apache 2.0.
+This notice preserves the provenance and license scope of attributed
+third-party portions. It does not relicense public episode data or claim
+ownership of the attributed source artifacts.
