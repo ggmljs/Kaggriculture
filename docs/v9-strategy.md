@@ -123,7 +123,7 @@ directly checks the behavior on later online cases.
 
 ### Local runtime and packaging
 
-The final local candidate uses `kaggle-environments==1.32.7`, passes 71 tests
+The submitted candidate uses `kaggle-environments==1.32.7`, passes 71 tests
 and `python -m pip check`, and compiles/imports as a self-contained module.
 Starter and random opponents from both seats each completed 720 states with
 `DONE/DONE` and no stderr. The reviewed package contains only `main.py`,
@@ -149,11 +149,17 @@ Starter and random opponents from both seats each completed 720 states with
 
 ## Delivery state
 
-V9 is a verified local candidate only. It has not been committed, pushed, or
-uploaded to Kaggle. The latest remote delivery remains V8 submission
-`55719179`, while V7 remains a separate submitted control. A future upload
-requires an explicitly authorized commit-and-push delivery cycle and remote
-validation before it can be called submitted or scored.
+The final V9 `main.py` maps to public Git commit
+`3f918431de637717b6a43b00a099eea662811243`, which was pushed to
+`origin/main` before upload. The reviewed 100,234-byte archive with SHA-256
+`0a188e825eada95009902566432246f07667688c2280578a81864c73f37c3735`
+was uploaded as Kaggle submission `55817164` with message
+`v9 fail-closed terminal liquidation 3f91843`.
+
+Kaggle recorded it at `2026-08-27T11:31:53.823Z`; validation was observed
+`COMPLETE` at `2026-08-27T11:36:45Z` with initial dynamic public score
+`600.0`. That value proves neither strength nor final rank; it is only the
+submission's first rating snapshot.
 
 Exact source hashes, corpus manifests, result hashes, time-slice results, and
 package evidence are in

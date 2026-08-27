@@ -323,7 +323,7 @@ submission validation.
   `COMPLETE / 2626.4` at that observation, so the prior remote baseline was not
   overwritten while V8 began its own dynamic rating trajectory.
 
-### V9: fail-closed terminal inventory reconciliation — 2026-08-27 (current local candidate)
+### V9: fail-closed terminal inventory reconciliation — 2026-08-27 (current)
 
 - Pulled the current remote snapshot at `2026-08-27T10:25:18Z`: V8 submission
   `55719179` remained `COMPLETE` at dynamic score `1848.0`, while V7 was
@@ -357,8 +357,14 @@ submission validation.
   `0a188e825eada95009902566432246f07667688c2280578a81864c73f37c3735`.
   See `docs/v9-strategy.md` and
   `docs/evidence/v9-failure-analysis.json` for exact manifests and limits.
-- V9 has not been committed, pushed, or uploaded. The current remote delivery
-  remains V8 until an explicitly authorized commit-and-push submission cycle.
+- Code commit `3f918431de637717b6a43b00a099eea662811243` was pushed to
+  `origin/main` before upload. Kaggle submission `55817164`, message
+  `v9 fail-closed terminal liquidation 3f91843`, reached `COMPLETE`; the
+  reviewed archive SHA-256 is
+  `0a188e825eada95009902566432246f07667688c2280578a81864c73f37c3735`.
+  Kaggle recorded it at `2026-08-27T11:31:53.823Z`; validation was observed at
+  `2026-08-27T11:36:45Z` with initial dynamic public score `600.0`. This is a
+  delivery snapshot, not a strength estimate or final rank.
 
 ## Verification Gates
 

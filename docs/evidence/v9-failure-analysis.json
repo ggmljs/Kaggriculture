@@ -40,7 +40,7 @@
         "LICENSE-APACHE-2.0.txt",
         "THIRD_PARTY_NOTICES.txt"
       ],
-      "uploaded": false
+      "uploaded": true
     }
   },
   "remote_snapshot": {
@@ -346,16 +346,24 @@
     "8C/6S late wheat reserve and cow recovery"
   ],
   "delivery": {
-    "committed": false,
-    "pushed": false,
-    "uploaded_to_kaggle": false,
-    "latest_remote_submission_id": 55719179,
-    "latest_remote_artifact": "V8"
+    "committed": true,
+    "code_commit_sha": "3f918431de637717b6a43b00a099eea662811243",
+    "pushed": true,
+    "pushed_ref": "origin/main",
+    "remote_code_sha_verified": true,
+    "uploaded_to_kaggle": true,
+    "submission_id": 55817164,
+    "submission_message": "v9 fail-closed terminal liquidation 3f91843",
+    "kaggle_recorded_at_utc": "2026-08-27T11:31:53.823Z",
+    "validation_observed_at_utc": "2026-08-27T11:36:45Z",
+    "status": "COMPLETE",
+    "initial_public_score": 600.0,
+    "latest_remote_artifact": "V9"
   },
   "claim_limits": [
     "Fixed-opponent-action replay results are open-loop counterfactuals, not closed-loop rematches.",
     "The final-action change has no later policy decision, which strengthens causal attribution on captured rows but does not predict a dynamic rating.",
     "The 133-game later time slice did not participate in V8 design, but it is now opened evidence rather than an unopened holdout.",
-    "A COMPLETE remote status proves validation only; no V9 upload or score exists."
+    "The V9 COMPLETE status proves validation only; its initial 600.0 score is a dynamic delivery snapshot, not a strength estimate."
   ]
 }

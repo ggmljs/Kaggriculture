@@ -6,7 +6,7 @@
   [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
   [![Kaggle Environment](https://img.shields.io/badge/Kaggle-Environment-20BEFF?logo=kaggle&logoColor=white)](https://www.kaggle.com/competitions/kaggriculture)
   [![Tests](https://img.shields.io/badge/tests-71%20passing-2ea44f?logo=pytest&logoColor=white)](#-verified-current-strategy)
-  [![Submission status](https://img.shields.io/badge/V8%20submission-COMPLETE-2ea44f?logo=kaggle&logoColor=white)](#-submission)
+  [![Submission status](https://img.shields.io/badge/V9%20submission-COMPLETE-2ea44f?logo=kaggle&logoColor=white)](#-submission)
   [![Policy](https://img.shields.io/badge/policy-V9%20terminal--reconciled-7B61FF)](#-strategy)
 
   **A deterministic public-demand-routed farm agent for Kaggle's 720-state economic simulation.**
@@ -14,7 +14,7 @@
 
 ## 🌾 Overview
 
-This repository contains the self-contained V9 local candidate for the
+This repository contains the self-contained V9 agent for the
 [Kaggriculture competition](https://www.kaggle.com/competitions/kaggriculture).
 V9 keeps V8's five observable public-shop experts and recovery-aware execution
 controller, then reconciles final sales against the shed that will actually be
@@ -66,7 +66,7 @@ JSON-safe actions, and has no runtime dependency on the rest of this repository.
 
 ## ✅ Verified current strategy
 
-The final local `main.py` SHA-256 is
+The submitted V9 `main.py` SHA-256 is
 `dc4ee0a23285ef9f1dd2ba9b9b8f39feb434e363859b60f82d3f793505edb88f`.
 The repository has 71 passing tests and `python -m pip check` reports no broken
 requirements. With `kaggle-environments==1.32.7`, starter and random matches
@@ -131,22 +131,17 @@ tar -tzf dist/submission.tar.gz
 
 ## 📦 Submission
 
-The V9 candidate has **not** been committed, pushed, or uploaded. The latest
-remote delivery remains V8 submission `55719179`, message
-`v8 divergence-gated third-yarn milk 779caae`, reached `COMPLETE`. The uploaded
+V9 submission `55817164`, message
+`v9 fail-closed terminal liquidation 3f91843`, reached `COMPLETE`. The uploaded
 `main.py` maps to public Git commit
-[`779caae`](https://github.com/COK-ZhangZiliang/Kaggriculture/commit/779caaec88a441345871e2d62eb5de93606b7b52).
+[`3f91843`](https://github.com/COK-ZhangZiliang/Kaggriculture/commit/3f918431de637717b6a43b00a099eea662811243),
+which was pushed to `origin/main` before the Kaggle upload.
 
-The reviewed V8 archive is 99,945 bytes with SHA-256
-`5c410ffb2a3637ce8840274c7eab70813c270209cbcbb79e735eb2c547a4b35d`.
-Kaggle recorded it at `2026-08-23T15:57:38.490Z`; validation was observed at
-`2026-08-23T16:02:22Z`. In the latest pulled snapshot it remained `COMPLETE`
-at dynamic score **1848.0**, while V7 was `COMPLETE / 2201.6`. These values are
-dynamic observations, not final strength estimates.
-
-The reviewed local V9 archive is 100,234 bytes with SHA-256
+The reviewed archive is 100,234 bytes with SHA-256
 `0a188e825eada95009902566432246f07667688c2280578a81864c73f37c3735`.
-It is a packaging artifact only, not a Kaggle submission.
+Kaggle recorded the submission at `2026-08-27T11:31:53.823Z`; validation was
+observed complete at `2026-08-27T11:36:45Z` with initial dynamic public score
+**600.0**. This is a delivery snapshot, not a strength estimate or final rank.
 
 The package contains only the self-contained entrypoint and the applicable
 Apache attribution files:
@@ -162,7 +157,7 @@ submission.tar.gz
 
 ```text
 .
-├── main.py                       # self-contained V9 local candidate
+├── main.py                       # self-contained V9 Kaggle agent
 ├── scripts/                      # local evaluation and packaging utilities
 ├── docs/v9-strategy.md           # current strategy and evidence boundary
 ├── docs/evidence/v9-failure-analysis.json
