@@ -1,11 +1,11 @@
-"""Kaggriculture V7: public-shop five-route recovery controller.
+"""Kaggriculture V9: V8 routing with terminal inventory reconciliation.
 
 The deterministic policy selects one of five production routes from public
 shop demand, with an early public-farm fallback for a legacy opening.  It then
-applies the V6 execution controls: seed feasibility, bounded weed and animal
-recovery, quantity-conserving premium-sale timing, executable-stock market
-ranking, terminal cleanup, and retry-safe per-seat action caching.  See
-THIRD_PARTY_NOTICES.md for provenance and modifications.
+applies the recovery-aware execution controls: seed feasibility, bounded weed
+and animal recovery, quantity-conserving premium-sale timing, executable-stock
+market ranking, same-turn terminal liquidation, and retry-safe per-seat action
+caching.  See THIRD_PARTY_NOTICES.md for provenance and modifications.
 """
 import base64
 import copy
@@ -1421,8 +1421,49 @@ def _v5_market_finalize(action, obs):
     return action
 
 
+def _terminal_liquidate(action, obs, step):
+    """Top up final-turn sales to the actual same-turn projected shed."""
+    if step < 718:
+        return action
+    action = _copy_action(action)
+    projected = _v5_projected_shed(obs, action)
+    sellable = (
+        "WHEAT",
+        "CARROT",
+        "TOMATO",
+        "STRAWBERRY",
+        "MELON",
+        "EGG",
+        "MILK",
+        "WOOL",
+        "FERTILIZER",
+    )
+    orders = [list(order) for order in action.get("market", []) or []]
+    requested = Counter()
+    first = {}
+    for index, order in enumerate(orders):
+        if (
+            len(order) >= 3
+            and order[0] == "SELL"
+            and order[1] in sellable
+        ):
+            item = order[1]
+            requested[item] += max(0, int(order[2] or 0))
+            first.setdefault(item, index)
+    for item in sellable:
+        quantity = max(0, int(projected.get(item, 0) or 0))
+        if quantity <= requested[item]:
+            continue
+        if item in first:
+            orders[first[item]][2] += quantity - requested[item]
+        elif len(orders) < 10:
+            orders.append(["SELL", item, quantity])
+    action["market"] = orders[:10]
+    return action
+
+
 def agent(obs, config=None):
-    """Return the V7 action for one Kaggriculture observation."""
+    """Return the V9 action for one Kaggriculture observation."""
     try:
         global _ACTIONS, _META_SALES
         raw_step = max(0, int(_get(obs, "step", 0) or 0))
@@ -1477,6 +1518,7 @@ def agent(obs, config=None):
         _meta_front_run(action, obs, step, meta)
         action = _v5_prune_terminal_wheat_seed(action, step)
         action = _v5_market_finalize(action, obs)
+        action = _terminal_liquidate(action, obs, step)
         _meta_remember_market(obs, step, action, meta)
         if signature is not None:
             _ACTION_CACHE[seat] = {

@@ -1,0 +1,361 @@
+{
+  "schema_version": "v9-evidence-1",
+  "candidate": {
+    "label": "V9 fail-closed terminal inventory reconciliation",
+    "main_sha256": "dc4ee0a23285ef9f1dd2ba9b9b8f39feb434e363859b60f82d3f793505edb88f",
+    "base_v8_main_sha256": "faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3",
+    "control_v7_main_sha256": "7ce060d8551cf3e7a20a800c1eea2e18ece63d6d6eab8e21199b65f9b78e4794",
+    "behavioral_change": "On step 718 only, compare same-turn projected sellable shed stock with the quantities already covered by SELL orders; top up an existing order or append the missing product without deleting or reducing any order.",
+    "v8_route_selector_unchanged": true,
+    "v8_route_tapes_unchanged": true,
+    "forbidden_features_absent": [
+      "opponent_identity",
+      "episode_id",
+      "submission_id",
+      "random_seed",
+      "private_opponent_state",
+      "future_opponent_actions",
+      "replay_lookup"
+    ],
+    "tests_passed": 71,
+    "pip_check": "No broken requirements found",
+    "py_compile": true,
+    "import_check": true,
+    "starter_random_both_seats": {
+      "games": 4,
+      "seed": 20260805,
+      "states_each": 720,
+      "statuses_each": [
+        "DONE",
+        "DONE"
+      ],
+      "stderr_empty": true,
+      "wins": 4
+    },
+    "package": {
+      "bytes": 100234,
+      "sha256": "0a188e825eada95009902566432246f07667688c2280578a81864c73f37c3735",
+      "contents": [
+        "main.py",
+        "LICENSE-APACHE-2.0.txt",
+        "THIRD_PARTY_NOTICES.txt"
+      ],
+      "uploaded": false
+    }
+  },
+  "remote_snapshot": {
+    "retrieval_completed_at_utc": "2026-08-27T10:25:18.145427Z",
+    "competition": "kaggriculture",
+    "submissions": {
+      "v4": {
+        "submission_id": 55569567,
+        "status": "COMPLETE",
+        "public_score": 2656.6
+      },
+      "v5": {
+        "submission_id": 55574866,
+        "status": "COMPLETE",
+        "public_score": 2656.4
+      },
+      "v7": {
+        "submission_id": 55638354,
+        "status": "COMPLETE",
+        "public_score": 2201.6
+      },
+      "v8": {
+        "submission_id": 55719179,
+        "status": "COMPLETE",
+        "public_score": 1848.0
+      }
+    },
+    "leaderboard": {
+      "snapshot_at_utc": "2026-08-27T10:23:25Z",
+      "team": "ziliangCok",
+      "rank": 256,
+      "team_count": 6569,
+      "best_team_score": 2201.6,
+      "best_team_score_is_not_v8_only": true,
+      "zip_sha256": "970e170266b9b8e9d74253dab9d79e0bc3befc77751c4e4bc2e9bfbf40f31bb7"
+    },
+    "submissions_json_sha256": "7fa3d3d85edb420a9c11e3804050a638c80d9aa7c64ad0198b2d9957281818f3",
+    "score_and_rank_are_dynamic_snapshots": true
+  },
+  "v8_public_replay_corpus": {
+    "source_submission_id": 55719179,
+    "api_episode_rows": 178,
+    "public_games": 177,
+    "validation_rows": 1,
+    "wins": 108,
+    "ties": 1,
+    "losses": 68,
+    "earliest_public_create_time_utc": "2026-08-23T16:04:50.543Z",
+    "latest_public_create_time_utc": "2026-08-27T10:15:37.080Z",
+    "engine_partitions": {
+      "1.32.7": 177
+    },
+    "states_each": 720,
+    "statuses_each": [
+      "DONE",
+      "DONE"
+    ],
+    "download_failures": 0,
+    "episode_manifest_sha256": "280d1862b6b0ca8b31e60af91bda431e242192470337ac213dfd6d0e2e03700c",
+    "episodes_raw_sha256": "754dd58fb0a1be2929452fe86055048f944cb4a39cc8fbe220fdfbe23a79db96",
+    "episode_outcomes_sha256": "2f01701dd46d6f290c7b77b4a8aa9000cda7569d3450726690e8379ed7028156",
+    "route_action_analysis_sha256": "e71446a266c111867c2643fee75bb9ee5f19250980fb153be76a6a91c9c47201"
+  },
+  "v8_failure_analysis": {
+    "reproduction_integrity": {
+      "v8_action_trace_exact": 177,
+      "rewards_exact": 177,
+      "statuses_exact": 177,
+      "opponent_tapes_exact": 177,
+      "clean_terminal": 177
+    },
+    "terminal_sellable_stock": {
+      "affected_games": 32,
+      "total_units": 1025,
+      "by_product": {
+        "WOOL": 1020,
+        "WHEAT": 3,
+        "STRAWBERRY": 2
+      },
+      "affected_losses": 15,
+      "loss_units": {
+        "WOOL": 542
+      },
+      "affected_wins": 17,
+      "win_units": {
+        "WOOL": 478,
+        "WHEAT": 3,
+        "STRAWBERRY": 2
+      },
+      "by_route": {
+        "current_8c6s_3q": {
+          "affected_games": 22,
+          "route_games": 22,
+          "units": 861
+        },
+        "current_6c8s_3q": {
+          "affected_games": 8,
+          "route_games": 8,
+          "units": 160
+        },
+        "10c4s_3q": {
+          "affected_games": 2,
+          "units": 4
+        }
+      }
+    },
+    "v8_trigger_vs_v7_fixed_tape": [
+      {
+        "episode_id": 100392086,
+        "v7_margin": -13100,
+        "v8_margin": -6754,
+        "delta": 6346
+      },
+      {
+        "episode_id": 97838320,
+        "v7_margin": -35506,
+        "v8_margin": -30350,
+        "delta": 5156
+      },
+      {
+        "episode_id": 100695583,
+        "v7_margin": -33539,
+        "v8_margin": 7663,
+        "delta": 41202,
+        "flipped_to_win": true
+      }
+    ],
+    "rejected_blanket_replacements_on_69_v8_nonwins": {
+      "v7": {
+        "improved": 0,
+        "unchanged": 67,
+        "regressed": 2,
+        "flipped_to_win": 0,
+        "mean_margin_delta": -166.69565217391303
+      },
+      "v5": {
+        "improved": 49,
+        "regressed": 20,
+        "flipped_to_win": 11
+      },
+      "v4": {
+        "improved": 39,
+        "regressed": 30,
+        "flipped_to_win": 8
+      },
+      "result_sha256": "7392dc899bf8d25c4569798edbb95b828604532b6b75def4793361a19bfc4663"
+    },
+    "inference": "The dynamic V7/V8 score gap is not attributable to the V8 branch from these fixed tapes: all three triggered V8 rows improved. Different online opponent samples and rating trajectories remain confounders."
+  },
+  "v8_full_fixed_tape_gate": {
+    "engine": "kaggle-environments==1.32.7",
+    "games": 177,
+    "baseline_calibration_exact": true,
+    "v8": {
+      "wins": 108,
+      "ties": 1,
+      "losses": 68,
+      "mean_margin": 2171.271186440678
+    },
+    "v9": {
+      "wins": 110,
+      "ties": 1,
+      "losses": 66,
+      "mean_margin": 2431.0960451977403
+    },
+    "v8_wins_tested": 108,
+    "v8_wins_preserved": 108,
+    "improved_rows": 32,
+    "unchanged_rows": 145,
+    "regressed_rows": 0,
+    "mean_margin_delta": 259.82485875706215,
+    "total_margin_delta": 45989,
+    "minimum_changed_row_delta": 8,
+    "maximum_changed_row_delta": 13730,
+    "losses_flipped_to_wins": [
+      98672699,
+      99646509
+    ],
+    "all_clean_terminal": true,
+    "all_changed_rows_first_and_only_action_difference_step": 718,
+    "changed_rows_terminal_sellable_units_before": 1025,
+    "changed_rows_terminal_sellable_units_after": 0,
+    "result_sha256": "afab93a2fc83acfc3cb915e4276dcdab00682b2dda852eb4350a88b3daab08ef",
+    "private_terminal_audit_sha256": "e69b6315c899aacc26e7e9e1a1384deaad0093f6b78032bcd1b44397d9521b0d",
+    "fixed_tape_runner_sha256": "2d6f4d59e801f62ed916c0b6e2e9e49fc45bcded99d65115f3a1943aa18337d4"
+  },
+  "v7_control_corpus": {
+    "source_submission_id": 55638354,
+    "public_games": 333,
+    "wins": 157,
+    "ties": 3,
+    "losses": 173,
+    "earliest_public_create_time_utc": "2026-08-20T05:02:08.643Z",
+    "latest_public_end_time_utc": "2026-08-27T10:05:20.909Z",
+    "engine_partitions": {
+      "1.32.7": 333
+    },
+    "states_each": 720,
+    "statuses_each": [
+      "DONE",
+      "DONE"
+    ],
+    "download_failures": 0,
+    "all_valid": true,
+    "validation_issue_count": 0,
+    "overlap_with_v8_episode_ids": 0,
+    "sha256_manifest_files": 338,
+    "sha256_manifest_total_bytes": 10324448891,
+    "sha256_ledger": "f83def7e03f51cac4d6edcc804a7f90ed40500c1138d74d1cb8d42ff71724886",
+    "episode_outcomes_sha256": "f414e1b1c43357d133e5b59eb49ff63eaaa65f5ec35602c7b4f043600aac6f12",
+    "episode_manifest_sha256": "21fef0f828c2102ebee1caf3be91c419a002f6046f8027a98e2ae57b74461a2f",
+    "replay_validation_sha256": "bf7951743e38492be6a82968e368c3eaf3c90bce31b42e95a603c68914d03682",
+    "sha256_manifest_sha256": "3a5e4a633b75ad9fce278b21f4e3a3fc528d2e3f8a4ef2e8389564fff511ec45"
+  },
+  "v7_control_three_way_gate": {
+    "baseline_calibration_exact": true,
+    "policies": {
+      "v7": {
+        "wins": 157,
+        "ties": 3,
+        "losses": 173,
+        "mean_margin": -1876.2552552552552
+      },
+      "v8": {
+        "wins": 162,
+        "ties": 3,
+        "losses": 168,
+        "mean_margin": -876.3543543543543
+      },
+      "v9": {
+        "wins": 169,
+        "ties": 2,
+        "losses": 162,
+        "mean_margin": -520.7207207207207
+      }
+    },
+    "v8_vs_v7": {
+      "improved_rows": 18,
+      "unchanged_rows": 315,
+      "regressed_rows": 0,
+      "mean_margin_delta": 999.900900900901,
+      "v7_wins_preserved": 157,
+      "nonwins_flipped_to_win": 5
+    },
+    "v9_vs_v8": {
+      "improved_rows": 68,
+      "unchanged_rows": 265,
+      "regressed_rows": 0,
+      "mean_margin_delta": 355.6336336336336,
+      "v8_wins_preserved": 162,
+      "nonwins_flipped_to_win": 7
+    },
+    "v9_vs_v7": {
+      "improved_rows": 85,
+      "unchanged_rows": 248,
+      "regressed_rows": 0,
+      "mean_margin_delta": 1355.5345345345345,
+      "v7_wins_preserved": 157,
+      "nonwins_flipped_to_win": 12
+    },
+    "v7_vs_v9_result_sha256": "dfd1ad1d1262aa510162b788a31eeed9ac52ed537397b8a1bc027e15741c9ab1",
+    "frozen_v8_result_sha256": "6dc65db811b2297cb7697d443c5bbd019249c8bf6a8792b1428be2f0d1601050",
+    "three_way_summary_sha256": "9e8ebcd997026cbacc050370f9068a069fabc1e997b609d1cce436472e08db34",
+    "all_clean_terminal": true
+  },
+  "post_v8_design_time_slice": {
+    "cutoff_utc": "2026-08-23T15:45:18Z",
+    "games": 133,
+    "recorded_v7": {
+      "wins": 17,
+      "ties": 2,
+      "losses": 114,
+      "mean_margin": -9564.819548872181
+    },
+    "v8_vs_v7": {
+      "improved_rows": 9,
+      "unchanged_rows": 124,
+      "regressed_rows": 0,
+      "mean_margin_delta": 1267.2932330827068,
+      "wins_preserved": 17
+    },
+    "v9_vs_v8": {
+      "improved_rows": 21,
+      "unchanged_rows": 112,
+      "regressed_rows": 0,
+      "mean_margin_delta": 383.3834586466165,
+      "wins_preserved": 17,
+      "nonwins_flipped_to_win": [
+        99797162
+      ]
+    },
+    "v9": {
+      "wins": 18,
+      "ties": 2,
+      "losses": 113,
+      "mean_margin": -7914.142857142857
+    },
+    "not_an_unopened_holdout": true
+  },
+  "deferred_candidates": [
+    "second-Yarn shared-prefix redesign",
+    "official hinge scarcity parity for Carrot Tomato and Egg",
+    "8C/6S late wheat reserve and cow recovery"
+  ],
+  "delivery": {
+    "committed": false,
+    "pushed": false,
+    "uploaded_to_kaggle": false,
+    "latest_remote_submission_id": 55719179,
+    "latest_remote_artifact": "V8"
+  },
+  "claim_limits": [
+    "Fixed-opponent-action replay results are open-loop counterfactuals, not closed-loop rematches.",
+    "The final-action change has no later policy decision, which strengthens causal attribution on captured rows but does not predict a dynamic rating.",
+    "The 133-game later time slice did not participate in V8 design, but it is now opened evidence rather than an unopened holdout.",
+    "A COMPLETE remote status proves validation only; no V9 upload or score exists."
+  ]
+}

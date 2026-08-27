@@ -282,7 +282,7 @@ submission validation.
   `2026-08-20T05:02:19Z` with an initial dynamic public score of `600.0`. V7
   was later observed at `681.7` on `2026-08-20T05:05:16Z`.
 
-### V8: divergence-gated third-Yarn milk routing — 2026-08-24 (current)
+### V8: divergence-gated third-Yarn milk routing — 2026-08-24
 
 - Pulled the latest V7 remote snapshot at `2026-08-23T15:45:18Z`: submission
   `55638354` remained `COMPLETE` at dynamic score `2626.4`, while the
@@ -322,6 +322,43 @@ submission validation.
   `2026-08-23T16:02:22Z` with initial dynamic score `600.0`. V7 remained
   `COMPLETE / 2626.4` at that observation, so the prior remote baseline was not
   overwritten while V8 began its own dynamic rating trajectory.
+
+### V9: fail-closed terminal inventory reconciliation — 2026-08-27 (current local candidate)
+
+- Pulled the current remote snapshot at `2026-08-27T10:25:18Z`: V8 submission
+  `55719179` remained `COMPLETE` at dynamic score `1848.0`, while V7 was
+  `COMPLETE / 2201.6`. The `2026-08-27T10:23:25Z` public leaderboard placed
+  `ziliangCok` at rank 256/6,569 using the team's best score. These are dynamic
+  observations and do not causally identify the V8 selector as the decline.
+- Retrieved and exactly calibrated all 177 exposed V8 public episodes: 108
+  wins, one tie, and 68 losses, all 720 states and `DONE/DONE` under engine
+  `1.32.7`. Thirty-two games stranded 1,025 sellable terminal units, dominated
+  by 1,020 wool; this was route-schedule drift, not a crash.
+- Kept all V8 routes and selectors. On step 718 only, V9 projects the shed after
+  same-turn unit actions and tops up or appends SELL orders when actual stock
+  exceeds the existing requested quantity. It never removes or reduces an
+  order and remains within the ten-order schema cap.
+- On the calibrated 177-game V8 tapes, V9 improved 32 rows, left 145 unchanged,
+  regressed zero, retained all 108 wins, and flipped two losses, moving to
+  110/1/66 with mean-margin delta `+259.825`. The 32 changed games finished
+  with zero sellable stock across shed and unit inventories.
+- A second 333-game V7 control corpus calibrated exactly at 157/3/173. V9
+  improved 85, left 248 unchanged, regressed zero, retained all 157 V7 wins,
+  and flipped 12 non-wins. The three-way decomposition found zero regressions
+  both for V8 versus V7 (18 improved) and for V9 versus V8 (68 improved). The
+  133-game post-V8-design time slice also had zero regression. These are
+  fixed-opponent-action counterfactuals, not live rematches or leaderboard
+  forecasts.
+- Final local `main.py` SHA-256 is
+  `dc4ee0a23285ef9f1dd2ba9b9b8f39feb434e363859b60f82d3f793505edb88f`.
+  The repository has 71 passing tests; starter and random both-seat smokes each
+  reached 720 states and `DONE/DONE`. The reviewed 100,234-byte local archive
+  SHA-256 is
+  `0a188e825eada95009902566432246f07667688c2280578a81864c73f37c3735`.
+  See `docs/v9-strategy.md` and
+  `docs/evidence/v9-failure-analysis.json` for exact manifests and limits.
+- V9 has not been committed, pushed, or uploaded. The current remote delivery
+  remains V8 until an explicitly authorized commit-and-push submission cycle.
 
 ## Verification Gates
 

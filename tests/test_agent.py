@@ -1185,6 +1185,90 @@ def test_terminal_seed_prune_removes_the_order_instead_of_emitting_zero():
     assert all(len(order) < 3 or int(order[2]) > 0 for order in pruned["market"])
 
 
+def test_terminal_liquidation_is_inactive_before_the_final_turn():
+    action = {"farmer": ["PASS"], "hands": [], "market": []}
+
+    finalized = submission._terminal_liquidate(
+        action, make_observation(step=717, shed={"WOOL": 42}), 717
+    )
+
+    assert finalized is action
+    assert finalized["market"] == []
+
+
+def test_terminal_liquidation_appends_missing_projected_stock():
+    action = {
+        "farmer": ["PASS"],
+        "hands": [],
+        "market": [["SELL", "WHEAT", 5]],
+    }
+
+    finalized = submission._terminal_liquidate(
+        action,
+        make_observation(step=718, shed={"WHEAT": 5, "WOOL": 42}),
+        718,
+    )
+
+    assert finalized["market"] == [
+        ["SELL", "WHEAT", 5],
+        ["SELL", "WOOL", 42],
+    ]
+
+
+def test_terminal_liquidation_tops_up_but_does_not_reduce_a_sale():
+    action = {
+        "farmer": ["PASS"],
+        "hands": [],
+        "market": [
+            ["SELL", "WHEAT", 10],
+            ["SELL", "WOOL", 50],
+        ],
+    }
+
+    finalized = submission._terminal_liquidate(
+        action,
+        make_observation(step=718, shed={"WHEAT": 13, "WOOL": 42}),
+        718,
+    )
+
+    assert finalized["market"] == [
+        ["SELL", "WHEAT", 13],
+        ["SELL", "WOOL", 50],
+    ]
+
+
+def test_terminal_liquidation_includes_same_turn_deposits():
+    action = {
+        "farmer": ["PLACE", "WOOL", 5],
+        "hands": [],
+        "market": [],
+    }
+    obs = make_observation(
+        step=718,
+        shed={"WOOL": 2},
+        inventories=[{"WOOL": 5}],
+    )
+
+    finalized = submission._terminal_liquidate(action, obs, 718)
+
+    assert finalized["market"] == [["SELL", "WOOL", 7]]
+
+
+def test_terminal_liquidation_never_exceeds_the_market_order_cap():
+    action = {
+        "farmer": ["PASS"],
+        "hands": [],
+        "market": [["BUY_SEED", "WHEAT", 1] for _ in range(10)],
+    }
+
+    finalized = submission._terminal_liquidate(
+        action, make_observation(step=718, shed={"WOOL": 42}), 718
+    )
+
+    assert len(finalized["market"]) == 10
+    assert not [order for order in finalized["market"] if order[0] == "SELL"]
+
+
 def test_meta_state_is_isolated_between_player_seats():
     reset_controller()
     submission._META_STATE[0]["h4_active"] = True
