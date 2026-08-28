@@ -131,6 +131,45 @@ def make_legacy_observation(*, step=24, player=0, shops=None):
     return obs
 
 
+def make_v10_gate_observation(
+    *,
+    step=72,
+    player=0,
+    first_shop="BAKERY",
+    own_money=10,
+    opponent_money=11,
+    melon_count=5,
+):
+    obs = make_observation(
+        step=step,
+        player=player,
+        shops=[first_shop],
+    )
+    obs["farms"][player]["money"] = own_money
+    opponent_index = 1 - player
+    opponent = obs["farms"][opponent_index]
+    opponent["money"] = opponent_money
+    opponent["tiles"] = [[None for _ in range(10)] for _ in range(10)]
+    tiles = [
+        {"kind": "PASTURE", "animal": "COW"},
+        *[
+            {"kind": "PASTURE", "animal": "SHEEP"}
+            for _ in range(4)
+        ],
+        *[
+            {"kind": "PLANT", "crop": "WHEAT"}
+            for _ in range(5)
+        ],
+        *[
+            {"kind": "PLANT", "crop": "MELON"}
+            for _ in range(melon_count)
+        ],
+    ]
+    for index, tile in enumerate(tiles):
+        opponent["tiles"][index // 10][index % 10] = tile
+    return obs
+
+
 def reset_controller():
     submission._ACTIONS = submission._ACTIONS_8C6S_3Q
     submission._META_SALES = submission._V7_CURRENT_SALES["8c6s_3q"]
@@ -142,12 +181,18 @@ def reset_controller():
                 "legacy": None,
                 "label": None,
                 "third_yarn_milk": None,
+                "v5_gate": None,
+                "v5_shops": (),
+                "v5_expert": None,
             },
             1: {
                 "last_step": -1,
                 "legacy": None,
                 "label": None,
                 "third_yarn_milk": None,
+                "v5_gate": None,
+                "v5_shops": (),
+                "v5_expert": None,
             },
         }
     )
@@ -257,6 +302,144 @@ def test_routes_are_frozen_with_route_specific_sale_schedules():
         routes["8c6s_3q"][:72]
         == routes["6c12s_4q_second_yarn"][:72]
     )
+
+
+def test_v10_recovery_routes_are_frozen_at_the_safe_divergence():
+    expected = {
+        "low": (
+            submission._V5_LOW_ACTIONS,
+            submission._V5_LOW_META_SALES,
+            "93daf1e051d2f394c50c08b59d0fd56d55bf0a5e8770e08701dbcacb91458518",
+            "7f6fea9758b3d15d743f889c0cab0866b2ffe75252d0f350d08f341d9a3214cd",
+        ),
+        "high": (
+            submission._V5_HIGH_ACTIONS,
+            submission._V5_HIGH_META_SALES,
+            "a548603cf9cae2bda0bc016d50d574e072287ea68315b790b7341c99ab63a31c",
+            "379725e54fc10ece6b1841495b5a3fb04aff221738d38ee6c247e3dda75f1429",
+        ),
+    }
+    for route, sales, route_hash, sales_hash in expected.values():
+        assert len(route) == 719
+        assert hashlib.sha256(
+            json.dumps(route, separators=(",", ":")).encode()
+        ).hexdigest() == route_hash
+        assert hashlib.sha256(
+            json.dumps(sales, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest() == sales_hash
+
+    v9_routes = [
+        *submission._V7_CURRENT_ROUTES.values(),
+        *submission._V7_LEGACY_ROUTES.values(),
+    ]
+    assert all(
+        submission._V5_LOW_ACTIONS[:72] == route[:72]
+        for route in v9_routes
+    )
+    assert submission._V5_LOW_ACTIONS[:168] == submission._V5_HIGH_ACTIONS[:168]
+    assert submission._V5_LOW_ACTIONS[168] != submission._V5_HIGH_ACTIONS[168]
+
+
+def test_v10_gate_is_complete_seat_relative_and_sticky():
+    for player in (0, 1):
+        reset_controller()
+        obs = make_v10_gate_observation(player=player)
+        route, sales = submission._select_route(obs, 72)
+        assert route is submission._V5_LOW_ACTIONS
+        assert sales is submission._V5_LOW_META_SALES
+        assert submission._ROUTE_STATE[player]["v5_gate"] is True
+
+        later = make_observation(
+            step=168,
+            player=player,
+            shops=["BAKERY", "YARN_STORE"],
+        )
+        route, sales = submission._select_route(later, 168)
+        assert route is submission._V5_HIGH_ACTIONS
+        assert sales is submission._V5_HIGH_META_SALES
+        assert submission._ROUTE_STATE[player]["v5_expert"] == "high"
+
+
+def test_v10_gate_fails_closed_on_every_public_boundary():
+    cases = []
+    wrong_shop = make_v10_gate_observation(first_shop="FARMERS_MARKET")
+    cases.append(wrong_shop)
+    wrong_melon = make_v10_gate_observation(melon_count=6)
+    cases.append(wrong_melon)
+    no_cash_lead = make_v10_gate_observation(
+        own_money=11,
+        opponent_money=11,
+    )
+    cases.append(no_cash_lead)
+    missing_money = make_v10_gate_observation()
+    del missing_money["farms"][0]["money"]
+    cases.append(missing_money)
+    infinite_money = make_v10_gate_observation(own_money=float("-inf"))
+    cases.append(infinite_money)
+    boolean_money = make_v10_gate_observation(own_money=False)
+    cases.append(boolean_money)
+    malformed_tiles = make_v10_gate_observation()
+    malformed_tiles["farms"][1]["tiles"] = [1]
+    cases.append(malformed_tiles)
+    for malformed_shops in ([[]], [{}], 7):
+        malformed = make_v10_gate_observation()
+        malformed["town"]["unlocked_shops"] = malformed_shops
+        cases.append(malformed)
+
+    for obs in cases:
+        reset_controller()
+        route, sales = submission._select_route(obs, 72)
+        assert route is submission._ACTIONS_8C6S_3Q
+        assert sales is submission._V7_CURRENT_SALES["8c6s_3q"]
+        assert submission._ROUTE_STATE[0]["v5_gate"] is False
+
+
+def test_v10_gate_cannot_open_after_a_miss_or_changed_same_step():
+    reset_controller()
+    missed = make_v10_gate_observation(step=73)
+    assert (
+        submission._select_route(missed, 73)[0]
+        is submission._ACTIONS_8C6S_3Q
+    )
+    assert submission._ROUTE_STATE[0]["v5_gate"] is None
+
+    reset_controller()
+    matched = make_v10_gate_observation()
+    assert submission._select_route(matched, 72)[0] is submission._V5_LOW_ACTIONS
+    corrected = make_v10_gate_observation(first_shop="FARMERS_MARKET")
+    assert (
+        submission._select_route(corrected, 72)[0]
+        is submission._ACTIONS_8C6S_3Q
+    )
+    assert submission._ROUTE_STATE[0]["v5_gate"] is False
+
+
+def test_malformed_shop_signal_keeps_the_default_agent_action():
+    malformed = make_v10_gate_observation()
+    malformed["town"]["unlocked_shops"] = [[]]
+    control = make_v10_gate_observation()
+    control["town"]["unlocked_shops"] = []
+
+    reset_controller()
+    malformed_action = agent(malformed)
+    reset_controller()
+    control_action = agent(control)
+
+    assert malformed_action == control_action
+    assert malformed_action["farmer"] != ["PASS"]
+
+
+def test_v10_gate_ignores_identity_seed_and_private_inventory():
+    selected = []
+    for seed, name, milk in ((11, "alpha", 0), (987654321, "beta", 99)):
+        reset_controller()
+        obs = make_v10_gate_observation()
+        obs["seed"] = seed
+        obs["EpisodeId"] = seed + 100
+        obs["opponent_name"] = name
+        obs["private"]["shed"] = {"MILK": milk}
+        selected.append(submission._select_route(obs, 72)[0])
+    assert selected == [submission._V5_LOW_ACTIONS] * 2
 
 
 def test_legacy_route_uses_only_the_validated_public_layout():

@@ -1,5 +1,23 @@
 # Third-party notices
 
+## Public-behavior recovery route reconstruction
+
+V10 adds two compressed, re-serialized recovery routes reconstructed from
+opponent actions visible in 111 public Kaggriculture episode replays:
+
+- the low route is a component-wise majority over 61 episodes whose opponent
+  ended with 10 cows and 4 sheep;
+- the high route uses the low prefix through step 167 and a component-wise
+  majority over nine episodes whose opponent ended with 6 cows and 8 sheep;
+- farmer actions, each hand slot, and the complete market list were voted
+  separately, normalized as JSON, and recompressed.
+
+This is a majority reconstruction of observable behavior. It is not
+source-code copying from every replay participant, does not establish that a
+participant used a named public Notebook, and does not recover any
+participant's current or private submission binary. V10 uses these routes only
+behind its fail-closed public opening gate.
+
 ## Adaptive public-shop route lineage
 
 `main.py` contains ten compressed, re-serialized public-shop action routes
@@ -76,9 +94,9 @@ These downloads support artifact-level inspection and local evaluation only.
 Similar behavior in a public episode is not proof that the episode executed
 the downloaded bytes.
 
-## Retained V8 controller lineage
+## Retained V10 controller lineage
 
-V8 retains controller and market-schedule lineage previously attributed to:
+V10 retains controller and market-schedule lineage previously attributed to:
 
 - [V16-RC5-R5A High-Score 8C/4S Recovery](https://www.kaggle.com/code/boatlee/v16-rc5-r5a-high-score-8c-4s-recovery),
   reference `main.py` SHA-256
@@ -87,15 +105,16 @@ V8 retains controller and market-schedule lineage previously attributed to:
   reference `main.py` SHA-256
   `df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5`.
 
-The earlier 8C/4S action tape is no longer the sole current V8 production
-route. V8 retains bounded weed and cow-placement repair plus the reduced public
-premium-sale schedule, then adds the five current/five legacy shop routes,
+The earlier 8C/4S action tape is no longer the sole current V10 production
+route. V10 retains bounded weed and cow-placement repair plus the reduced public
+premium-sale schedule, the five current/five legacy shop routes,
 public-state route selection, route-aware purchase reconciliation,
 quantity-conserving repayment, modified preemption and room-safety controls,
 malformed observation protection, retry-safe action caching, tests, packaging,
-and evidence controls. V8's new third-Yarn milk-support decision is an
+and evidence controls. V8's third-Yarn milk-support decision remains an
 independently implemented selector over public farm counts; it does not add or
-modify third-party route data.
+modify third-party route data. V10 independently adds the seat-relative
+opening gate and preserves V9's projected terminal liquidation.
 
 ## Repository license and distribution
 
