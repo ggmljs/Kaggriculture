@@ -5,102 +5,92 @@
 
   [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
   [![Kaggle Environment](https://img.shields.io/badge/Kaggle-Environment-20BEFF?logo=kaggle&logoColor=white)](https://www.kaggle.com/competitions/kaggriculture)
-  [![Tests](https://img.shields.io/badge/tests-71%20passing-2ea44f?logo=pytest&logoColor=white)](#-verified-current-strategy)
-  [![Submission status](https://img.shields.io/badge/V9%20submission-COMPLETE-2ea44f?logo=kaggle&logoColor=white)](#-submission)
-  [![Policy](https://img.shields.io/badge/policy-V9%20terminal--reconciled-7B61FF)](#-strategy)
+  [![Tests](https://img.shields.io/badge/tests-77%20passing-2ea44f?logo=pytest&logoColor=white)](#-verified-current-strategy)
+  [![Submission status](https://img.shields.io/badge/V10%20submission-COMPLETE-2ea44f?logo=kaggle&logoColor=white)](#-submission)
+  [![Policy](https://img.shields.io/badge/policy-V10%20fail--closed%20recovery-7B61FF)](#-strategy)
 
-  **A deterministic public-demand-routed farm agent for Kaggle's 720-state economic simulation.**
+  **A deterministic public-state farm agent for Kaggle's 720-state economic simulation.**
 </div>
 
 ## 🌾 Overview
 
-This repository contains the self-contained V9 agent for the
+This repository contains the self-contained V10 agent for the
 [Kaggriculture competition](https://www.kaggle.com/competitions/kaggriculture).
-V9 keeps V8's five observable public-shop experts and recovery-aware execution
-controller, then reconciles final sales against the shed that will actually be
-available after same-turn unit actions. It does not use identity, episode ID,
-submission ID, random seed, opponent-private inventory, or future actions.
+V10 keeps V9 as the default and adds one fail-closed opening recovery branch
+at the first safe route divergence. It uses only observable current-game state
+and never routes on identity, episode ID, submission ID, random seed,
+opponent-private inventory, replay lookup, or future actions.
 
 ```text
-public shop prefix
-  ├─ first shop is YARN_STORE          → first-Yarn 6C/12S route
-  ├─ first two shops end in YARN_STORE → second-Yarn 6C/12S route
-  ├─ Yarn is third + early milk support
-  │    ├─ public farm distance ≥ 3     → 10C/4S route
-  │    └─ public farm distance < 3     → 6C/8S route
-  ├─ other third-Yarn prefix           → 6C/8S route
-  ├─ early milk-support signal         → 10C/4S route
-  └─ otherwise                         → 8C/6S route
+step 72 public opening
+  ├─ complete recovery signature
+  │    ├─ Yarn appears by step 168 → frozen V5 high 6C/12S route
+  │    └─ otherwise                → frozen V5 low 10C/4S route
+  └─ missing, malformed, or other  → unchanged V9 selector and routes
 
-step 718 only
-  └─ projected sellable stock > scheduled SELL → top up final liquidation
+all paths
+  ├─ V9 recovery-aware execution controls
+  └─ step 718 projected-shed terminal liquidation
 ```
 
 The Kaggle entrypoint is [`main.py`](main.py). It is self-contained, returns
-JSON-safe actions, and has no runtime dependency on the rest of this repository.
+JSON-safe actions, and has no runtime dependency on the rest of this
+repository.
 
 ## 🧠 Strategy
 
-- The V8 per-seat selector retains first-Yarn, second-Yarn, ordinary
-  third-Yarn, early-milk, and default routes. Only a current third-Yarn prefix
-  whose first two shops support milk activates the divergence decision.
-- The selector measures the L1 difference in public cow, sheep, wheat, melon,
-  strawberry, and empty-pasture counts. A distance of at least three selects
-  the existing 10C/4S expert; a near mirror stays on 6C/8S. The decision is
-  sticky, seat-isolated, and reset between episodes.
-- A step-24–71 legacy-opening gate recognizes the older public opening shape
-  and selects its matching legacy tape. The divergence branch never applies
-  to a legacy route.
-- All five current and five legacy tapes are modified, normalized, compressed
-  route data derived from the Apache-2.0 artifact documented in
-  [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). The selector and runtime
-  execution controller are independently maintained in this repository.
-- Recovery controls remain active: day-boundary weed recovery, observable
-  cow-placement and purchase reconciliation, seed-prefix feasibility, bounded
-  premium prepayment/repayment, executable same-turn SELL ranking, terminal
-  seed pruning, retry-safe per-seat action caching, and malformed-observation
-  protection.
-- On step 718, V9 projects the same-turn shed, preserves sufficient sales, and
-  tops up or appends only uncovered products. Earlier actions and already
-  sufficient final orders remain unchanged; market orders stay capped at 10.
+- The recovery gate is evaluated only at step 72. It requires first shop
+  `BAKERY` or `PIZZA_SHOP`, an opponent public farm with exactly 1 cow,
+  4 sheep, 5 wheat, and 4–5 melon, plus lower public cash on our side.
+- Cash must be explicitly present and finite. Shop and tile structures must
+  match the public schema. Any missing or malformed feature closes the gate.
+- The decision is sticky, seat-isolated, reset-safe, and cannot open after the
+  decision step. All V9 routes and the recovery route share the first 72
+  actions, so the switch occurs before behavior diverges.
+- A matched game uses the frozen V5 low route, then selects the frozen high
+  route at step 168 if Yarn demand appears. Route provenance is documented in
+  [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+- Non-matching games retain V9's five current routes, five legacy routes,
+  third-Yarn milk selector, seed and weed recovery, animal reconciliation,
+  premium repayment, executable SELL ranking, retry-safe action cache, and
+  malformed-observation protection.
+- Step 718 still projects the same-turn shed, preserves sufficient existing
+  SELL orders, and only tops up uncovered sellable stock within the ten-order
+  cap.
 
 ## ✅ Verified current strategy
 
-The submitted V9 `main.py` SHA-256 is
-`dc4ee0a23285ef9f1dd2ba9b9b8f39feb434e363859b60f82d3f793505edb88f`.
-The repository has 71 passing tests and `python -m pip check` reports no broken
-requirements. With `kaggle-environments==1.32.7`, starter and random matches
-from both seats each completed 720 states with `DONE/DONE` and no stderr.
+The submitted V10 `main.py` SHA-256 is
+`56831f3c43c9727d90016b7a7a8d4eb51d1a4c08c1120d58f061d9176e8bc109`.
+The repository has 77 passing tests, and `python -m pip check` reports no
+broken requirements. Starter and random matches from both seats each reached
+720 states with `DONE/DONE`, no stderr, and a win.
 
-The `2026-08-27T10:25:18Z` submission snapshot showed V8 at dynamic score
-**1848.0** and V7 at **2201.6**. The public leaderboard archive at
-`2026-08-27T10:23:25Z` placed `ziliangCok` at rank **256/6569** with the team's
-best score **2201.6**; that row is not a V8-only score. Ratings and ranks are
-dynamic.
+The release hash was run against three calibrated public replay corpora:
 
-All 177 V8 public replays calibrated exactly at 108 wins, one tie, and 68
-losses. V9 changed only the final action in the 32 games whose scheduled SELL
-orders missed actual terminal stock:
+| Fixed opponent-action corpus | Games | V9 W/T/L | V10 W/T/L | Improved | Identical | Regressed |
+|:---|---:|:---:|:---:|---:|---:|---:|
+| V7 control | 333 | 169/2/162 | 169/2/162 | 2 | 331 | 0 |
+| V8 control | 177 | 110/1/66 | 111/1/65 | 2 | 175 | 0 |
+| latest V9 | 87 | 57/0/30 | 59/0/28 | 3 | 84 | 0 |
+| **Combined** | **597** | **336/3/258** | **339/3/255** | **7** | **590** | **0** |
 
-| Fixed opponent tape | Wins | Ties | Losses | Mean margin |
-|:---|---:|---:|---:|---:|
-| frozen V8 | 108 | 1 | 68 | +2171.271 |
-| **V9 terminal reconciliation** | **110** | **1** | **66** | **+2431.096** |
+V10 preserved all 336 known V9 wins. Every game reached 720 states with
+`DONE/DONE` and empty stderr. Combined mean margin moved from `+1171.886` to
+`+1266.020`.
 
-V9 improved all 32 affected rows, left 145 unchanged, regressed zero, retained
-all 108 V8 wins, and flipped two losses. The terminal audit reduced 1,025
-stranded sellable units to zero.
+Three public V9 episodes retrieved only after the gate was frozen were
+action- and margin-identical between V9 and V10. A separate fresh 80-game
+closed-loop panel against five hash-pinned opponents was also identical on all
+80 rows at 68 wins and mean margin `+2515.8125`.
 
-An additional 333-game V7 control corpus also calibrated exactly. V9 retained
-all 157 recorded V7 wins, improved 85 rows, left 248 unchanged, regressed zero,
-and moved from 157/3/173 to 169/2/162. Separately, V8 versus V7 had zero
-regressions, and V9's terminal change versus V8 also had zero regressions. On
-the 133 games created after the V8 design snapshot, V9 improved 29 end-to-end,
-left 104 unchanged, regressed zero, and flipped one loss. These are
-fixed-opponent-action counterfactuals, not live rematches or leaderboard
-estimates. Exact hashes, failure clusters, and claim limits are in
-[`docs/evidence/v9-failure-analysis.json`](docs/evidence/v9-failure-analysis.json)
-and [`docs/v9-strategy.md`](docs/v9-strategy.md).
+The recovery gate did not trigger in those fresh games. They verify that V10
+fails closed without drifting from V9; they do not prove fresh generalization
+of the recovery branch. The seven improvements are fixed recorded-opponent
+action counterfactuals, not live rematches or leaderboard forecasts. Exact
+hashes, rejected candidates, and claim limits are in
+[`docs/evidence/v10-failure-analysis.json`](docs/evidence/v10-failure-analysis.json)
+and [`docs/v10-strategy.md`](docs/v10-strategy.md).
 
 ## 🚜 Quick start
 
@@ -131,20 +121,22 @@ tar -tzf dist/submission.tar.gz
 
 ## 📦 Submission
 
-V9 submission `55817164`, message
-`v9 fail-closed terminal liquidation 3f91843`, reached `COMPLETE`. The uploaded
+V10 submission `55848408`, message
+`v10 fail-closed opening recovery 5c1ffa4`, reached `COMPLETE`. The uploaded
 `main.py` maps to public Git commit
-[`3f91843`](https://github.com/COK-ZhangZiliang/Kaggriculture/commit/3f918431de637717b6a43b00a099eea662811243),
-which was pushed to `origin/main` before the Kaggle upload.
+[`5c1ffa4`](https://github.com/COK-ZhangZiliang/Kaggriculture/commit/5c1ffa466e8755857a87936e0a24b2d4461aa61b),
+which was pushed to `origin/main` before upload.
 
-The reviewed archive is 100,234 bytes with SHA-256
-`0a188e825eada95009902566432246f07667688c2280578a81864c73f37c3735`.
-Kaggle recorded the submission at `2026-08-27T11:31:53.823Z`; validation was
-observed complete at `2026-08-27T11:36:45Z` with initial dynamic public score
-**600.0**. This is a delivery snapshot, not a strength estimate or final rank.
+The deterministic reviewed archive is 122,013 bytes with SHA-256
+`4b759b53b7e7ae81b7a1334208db82aacc8a0e1062546dab974843066648d8bb`.
+Kaggle recorded it at `2026-08-28T16:08:13.067Z`; validation was observed at
+`2026-08-28T16:10:25Z` with initial dynamic public score **600.0**.
 
-The package contains only the self-contained entrypoint and the applicable
-Apache attribution files:
+The operating target is `2600+`, but it has not yet been observed for V10. A
+new simulation submission begins its own dynamic rating trajectory, so the
+initial score is a delivery snapshot rather than a strength estimate.
+
+The package contains only:
 
 ```text
 submission.tar.gz
@@ -157,26 +149,27 @@ submission.tar.gz
 
 ```text
 .
-├── main.py                       # self-contained V9 Kaggle agent
+├── main.py                       # self-contained V10 Kaggle agent
 ├── scripts/                      # local evaluation and packaging utilities
-├── docs/v9-strategy.md           # current strategy and evidence boundary
-├── docs/evidence/v9-failure-analysis.json
-├── tests/                        # unit and environment smoke tests
+├── docs/v10-strategy.md          # current strategy and evidence boundary
+├── docs/evidence/v10-failure-analysis.json
+├── tests/                        # deterministic unit and smoke tests
 ├── THIRD_PARTY_NOTICES.md        # route provenance and modifications
-├── AGENTS.md                     # strategy history and workflow rules
+├── AGENTS.md                     # chronological strategy history and rules
 └── requirements*.txt             # portable dependency inputs and lockfile
 ```
 
 ## 🧭 Development gates
 
-Before changing the agent or submitting a new revision:
+Before changing or submitting the agent:
 
 1. Run `python -m pip check` and `python -m pytest -q`.
-2. Complete 720-state starter and random matches.
-3. Rebuild the archive and verify its exact contents and hash.
-4. Distinguish replay reproduction, open-loop diagnostics, closed-loop local
-   evaluation, remote validation, and leaderboard scoring.
-5. Stage only explicit paths and keep secrets and generated artifacts out of
+2. Complete 720-state starter and random matches from both seats.
+3. Require zero per-game margin regression and preserve every known win.
+4. Rebuild the archive and verify its exact contents, import, and hash.
+5. Distinguish fixed tapes, closed-loop panels, remote validation, and dynamic
+   leaderboard scoring.
+6. Stage only explicit paths and keep secrets and generated artifacts out of
    every commit.
 
 Repository-specific contribution and delivery rules live in
@@ -185,5 +178,5 @@ Repository-specific contribution and delivery rules live in
 ---
 
 <div align="center">
-  Reconcile what is executable, preserve every known win, then improve. 🌱
+  Fail closed, preserve every known win, then improve. 🌱
 </div>

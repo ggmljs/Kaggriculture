@@ -323,7 +323,7 @@ submission validation.
   `COMPLETE / 2626.4` at that observation, so the prior remote baseline was not
   overwritten while V8 began its own dynamic rating trajectory.
 
-### V9: fail-closed terminal inventory reconciliation — 2026-08-27 (current)
+### V9: fail-closed terminal inventory reconciliation — 2026-08-27
 
 - Pulled the current remote snapshot at `2026-08-27T10:25:18Z`: V8 submission
   `55719179` remained `COMPLETE` at dynamic score `1848.0`, while V7 was
@@ -365,6 +365,54 @@ submission validation.
   Kaggle recorded it at `2026-08-27T11:31:53.823Z`; validation was observed at
   `2026-08-27T11:36:45Z` with initial dynamic public score `600.0`. This is a
   delivery snapshot, not a strength estimate or final rank.
+
+### V10: fail-closed opening recovery — 2026-08-29 (current)
+
+- Pulled the pre-V10 submission snapshot at `2026-08-28T15:54:29Z`: V8 was
+  `COMPLETE / 1809.5`, V9 was `COMPLETE / 1677.2`, and the historically
+  stronger V4/V5 submissions still displayed `2656.6 / 2656.4` but no longer
+  occupied either active simulation slot. The decline audit separated active
+  slot replacement, replay-derived route specialization, margin-versus-win
+  objective mismatch, and dynamic-opponent confounding.
+- Retrieved 90 exposed V9 public episodes, including three that appeared only
+  after the V10 gate was frozen. V9 reproduced all recorded actions, all games
+  reached 720 states and `DONE/DONE`, and terminal sellable stock remained
+  reconciled. The online decline was not a recurrence of V9's terminal bug.
+- Kept V9 as the default. At step 72 only, a finite seat-relative gate selects
+  the frozen V5 recovery route when the first shop is Bakery/Pizza, the
+  opponent public farm is exactly 1C/4S/5W/4–5M, and our public cash trails.
+  Missing, malformed, late, or mismatched features close the gate. The route
+  decision is sticky, per-seat, retry-safe, and uses no identity, episode,
+  submission, seed, opponent-private state, replay lookup, or future actions.
+- The final `main.py` SHA-256 is
+  `56831f3c43c9727d90016b7a7a8d4eb51d1a4c08c1120d58f061d9176e8bc109`.
+  Across the final-hash V7/V8/V9 corpora, V10 improved 7 of 597 games, left
+  590 identical, regressed zero, preserved all 336 V9 known wins, and moved
+  from 336/3/258 to 339/3/255. All games were 720-state `DONE/DONE` with empty
+  stderr. These are fixed-opponent-action counterfactuals, not live rematches.
+- The three post-freeze public episodes were action- and margin-identical to
+  V9. A fresh five-opponent, eight-seed, both-seat closed-loop panel was also
+  identical on all 80 games at 68/80 wins. Neither fresh set triggered the
+  gate, so it proves fail-closed identity rather than fresh recovery-branch
+  generalization. See `docs/v10-strategy.md` and
+  `docs/evidence/v10-failure-analysis.json` for exact hashes and boundaries.
+- Rejected aggregate-positive candidates that violated the strict gate: a
+  blanket V5 rollback regressed 288/597 and lost 117 V9 wins; late seed
+  clipping improved 329/333 but regressed four and lost a known win; broader
+  step-72 rules and market-formula changes each retained per-game regressions.
+  An earlier absolute-seat audit error hid two regressions and its candidate
+  evidence was withdrawn before release.
+- The repository has 77 passing tests. Starter and random both-seat smokes
+  reached 720 states and `DONE/DONE`; `pip check`, archive compile/import, and
+  deterministic rebuild checks passed. The reviewed 122,013-byte archive
+  SHA-256 is
+  `4b759b53b7e7ae81b7a1334208db82aacc8a0e1062546dab974843066648d8bb`.
+- Code commit `5c1ffa466e8755857a87936e0a24b2d4461aa61b` was pushed to
+  `origin/main` before upload. Kaggle submission `55848408`, message
+  `v10 fail-closed opening recovery 5c1ffa4`, reached `COMPLETE`; Kaggle
+  recorded it at `2026-08-28T16:08:13.067Z`, and validation was observed at
+  `2026-08-28T16:10:25Z` with initial dynamic score `600.0`. The `2600+`
+  target has not yet been observed and remains a live-rating objective.
 
 ## Verification Gates
 

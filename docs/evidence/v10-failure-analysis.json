@@ -1,0 +1,382 @@
+{
+  "schema_version": "v10-evidence-2",
+  "generated_at_utc": "2026-08-28T16:11:56Z",
+  "candidate": {
+    "label": "V10 fail-closed opening recovery",
+    "final_main_sha256": "56831f3c43c9727d90016b7a7a8d4eb51d1a4c08c1120d58f061d9176e8bc109",
+    "v9_main_sha256": "dc4ee0a23285ef9f1dd2ba9b9b8f39feb434e363859b60f82d3f793505edb88f",
+    "v5_low_route_sha256": "93daf1e051d2f394c50c08b59d0fd56d55bf0a5e8770e08701dbcacb91458518",
+    "v5_high_route_sha256": "a548603cf9cae2bda0bc016d50d574e072287ea68315b790b7341c99ab63a31c",
+    "gate_step": 72,
+    "gate": {
+      "first_shop_in": [
+        "BAKERY",
+        "PIZZA_SHOP"
+      ],
+      "opponent_public_counts": {
+        "COW": 1,
+        "SHEEP": 4,
+        "WHEAT": 5,
+        "MELON": [
+          4,
+          5
+        ]
+      },
+      "cash_relation": "own_public_money < opponent_public_money",
+      "cash_must_be_present_and_finite": true,
+      "malformed_public_state_closes_gate": true,
+      "late_or_missed_decision_closes_gate": true,
+      "sticky_per_seat": true,
+      "reset_safe": true
+    },
+    "recovery_behavior": {
+      "route_before_step_168": "V5 low 10C/4S",
+      "step_168_high_condition": "YARN_STORE observed after the qualifying Bakery/Pizza opening",
+      "high_route": "V5 6C/12S",
+      "retained_runtime": "V9 execution controls and step-718 projected-shed liquidation"
+    },
+    "forbidden_features_absent": [
+      "opponent_identity",
+      "episode_id",
+      "submission_id",
+      "random_seed",
+      "private_opponent_state",
+      "future_opponent_actions",
+      "replay_lookup"
+    ],
+    "target_public_score": 2600.0,
+    "target_observed": false,
+    "target_is_guaranteed": false
+  },
+  "remote_snapshot_before_v10": {
+    "snapshot_at_utc": "2026-08-28T15:54:29Z",
+    "source": "kaggle competitions submissions -c kaggriculture -v",
+    "scores_are_dynamic": true,
+    "submissions": {
+      "v4": {
+        "id": 55569567,
+        "status": "COMPLETE",
+        "public_score": 2656.6
+      },
+      "v5": {
+        "id": 55574866,
+        "status": "COMPLETE",
+        "public_score": 2656.4
+      },
+      "v6": {
+        "id": 55596752,
+        "status": "COMPLETE",
+        "public_score": 2343.2
+      },
+      "v7": {
+        "id": 55638354,
+        "status": "COMPLETE",
+        "public_score": 2192.2
+      },
+      "v8": {
+        "id": 55719179,
+        "status": "COMPLETE",
+        "public_score": 1809.5
+      },
+      "v9": {
+        "id": 55817164,
+        "status": "COMPLETE",
+        "public_score": 1677.2
+      }
+    },
+    "active_simulation_slots": [
+      "v8",
+      "v9"
+    ],
+    "leaderboard_snapshot": {
+      "snapshot_at_utc": "2026-08-28T14:23:49Z",
+      "rank": 765,
+      "team_count": 6735,
+      "team_score": 1801.9,
+      "submission_count": 2,
+      "zip_sha256": "77e7b421b35d1716f185c78ec9e39a8b0b78e2bcca64bdd9bf0c5d5b5ae03304"
+    }
+  },
+  "failure_analysis": {
+    "summary": "The observed decline combines active-slot replacement, replay-derived route specialization, an aggregate-margin versus win/rating objective mismatch, and non-comparable dynamic opponent samples. The V9 terminal reconciliation is functioning online and is not the root cause.",
+    "root_causes": [
+      {
+        "id": "active_slot_replacement",
+        "finding": "Historically stronger V4/V5 trajectories no longer occupied either active simulation slot."
+      },
+      {
+        "id": "route_specialization_and_open_loop_overfit",
+        "finding": "V6-V8 added increasingly specific replay-derived routes and gates; fixed opponent actions do not model closed-loop reactions."
+      },
+      {
+        "id": "margin_win_rating_mismatch",
+        "finding": "Aggregate or mean margin can improve while individual wins are lost; rating promotion must preserve every known win and every per-game margin."
+      },
+      {
+        "id": "dynamic_opponent_confounding",
+        "finding": "Versions faced different sampled opponents and rating trajectories, so score gaps alone are not causal experiments."
+      },
+      {
+        "id": "v9_terminal_fix_not_root_cause",
+        "latest_public_games": 90,
+        "wins": 59,
+        "ties": 0,
+        "losses": 31,
+        "all_720_done_done": true,
+        "actions_exact": 90,
+        "terminal_sellable_stock_remaining": false
+      }
+    ]
+  },
+  "release_hash_fixed_tape_gate": {
+    "engine": "kaggle-environments==1.32.7",
+    "claim_boundary": "Fixed recorded opponent actions; not closed-loop rematches or a leaderboard forecast.",
+    "combined": {
+      "games": 597,
+      "v9": {
+        "wins": 336,
+        "ties": 3,
+        "losses": 258,
+        "mean_margin": 1171.886097152429
+      },
+      "v10": {
+        "wins": 339,
+        "ties": 3,
+        "losses": 255,
+        "mean_margin": 1266.0201005025126
+      },
+      "improved": 7,
+      "identical": 590,
+      "regressed": 0,
+      "known_v9_wins": 336,
+      "known_v9_wins_preserved": 336,
+      "losses_flipped_to_wins": 3,
+      "mean_margin_delta": 94.13400335008376,
+      "all_720_done_done": true,
+      "stderr_games": 0
+    },
+    "corpora": {
+      "v7_public_333": {
+        "v9_wins_ties_losses": [
+          169,
+          2,
+          162
+        ],
+        "v10_wins_ties_losses": [
+          169,
+          2,
+          162
+        ],
+        "improved": 2,
+        "identical": 331,
+        "regressed": 0,
+        "known_wins_preserved": "169/169",
+        "changed_episode_ids": [
+          94924553,
+          95038925
+        ],
+        "release_result_sha256": "9da40522643d7650bbf696547c494b19be8cd411d50c20eb75a8971cbe0a9988"
+      },
+      "v8_public_177": {
+        "v9_wins_ties_losses": [
+          110,
+          1,
+          66
+        ],
+        "v10_wins_ties_losses": [
+          111,
+          1,
+          65
+        ],
+        "improved": 2,
+        "identical": 175,
+        "regressed": 0,
+        "known_wins_preserved": "110/110",
+        "changed_episode_ids": [
+          97753621,
+          97776549
+        ],
+        "release_result_sha256": "89f5a37462ce0f41cf4ca0981e0ebce081f12d1bfc1425c067230f34c772d75a"
+      },
+      "v9_public_87": {
+        "v9_wins_ties_losses": [
+          57,
+          0,
+          30
+        ],
+        "v10_wins_ties_losses": [
+          59,
+          0,
+          28
+        ],
+        "improved": 3,
+        "identical": 84,
+        "regressed": 0,
+        "known_wins_preserved": "57/57",
+        "changed_episode_ids": [
+          100864141,
+          100884796,
+          101231662
+        ],
+        "release_result_sha256": "fb79a1a3fc835100eedc08ce807b0e82ada36ccda87a9d6b202ee1326fb4e5f8"
+      }
+    }
+  },
+  "temporal_holdout": {
+    "description": "Three V9 public episodes exposed only after the conservative gate and trigger scans were frozen.",
+    "episode_ids": [
+      101761834,
+      101772878,
+      101781866
+    ],
+    "gate_hits": 0,
+    "v10_actions_identical_to_v9": 3,
+    "margins_identical": 3,
+    "known_wins_preserved": "2/2",
+    "all_720_done_done": true,
+    "stderr_games": 0,
+    "release_result_sha256": "43ba6da130ce09e2f5b184e5c756d3970e327458cc0e898923ce73f00c279cb9",
+    "source_gate_scan_sha256": "55fbab09730b94508ad7fb13ef18e278031f603fe9ce3cfeebb0b33df132e7ae"
+  },
+  "fresh_fail_closed_evidence": {
+    "closed_loop_80": {
+      "opponents": 5,
+      "seeds": 8,
+      "both_seats": true,
+      "v9_wins_ties_losses": [
+        68,
+        0,
+        12
+      ],
+      "v10_wins_ties_losses": [
+        68,
+        0,
+        12
+      ],
+      "improved": 0,
+      "identical": 80,
+      "regressed": 0,
+      "known_wins_preserved": "68/68",
+      "mean_margin": 2515.8125,
+      "gate_hits": 0,
+      "all_720_done_done": true,
+      "stderr_games": 0,
+      "release_result_sha256": "65c69ece2f2adbc9b5311ec2160849e4f2421417636c105f221af534bf001ec0"
+    },
+    "trigger_scan_384_hash_pinned_games": {
+      "gate_hits": 0,
+      "result_sha256": "668f1ce5a8f8c8d836ce1aee26b77178c16a2f9f98ac1a31566b0977ce43821c"
+    },
+    "trigger_scan_128_builtin_games": {
+      "gate_hits": 0,
+      "all_v9_wins": true,
+      "all_720_done_done": true,
+      "result_sha256": "5e62e64f1c0068f06cdfa4e64150e202983390786caa1c68b5e6553e4039457e"
+    },
+    "claim_boundary": "Fresh games validate fail-closed identity when the gate does not match. They do not provide a fresh triggered sample or prove recovery-branch generalization."
+  },
+  "rejected_candidates": [
+    {
+      "name": "blanket_v5_terminal",
+      "games": 597,
+      "improved": 309,
+      "regressed": 288,
+      "known_v9_wins_lost": 117,
+      "reason": "Large aggregate changes but catastrophic per-game and known-win regression."
+    },
+    {
+      "name": "late_v5_splice",
+      "triggered": 27,
+      "improved": 2,
+      "regressed": 25,
+      "known_wins_preserved": "3/9"
+    },
+    {
+      "name": "official_market_formula_parity",
+      "games": 177,
+      "improved": 13,
+      "regressed": 6,
+      "known_wins_lost": 0,
+      "result_sha256": "f65bf89d7808a66dab8e0884a67ff3c2dad9113ab11aa6b71500674efb643a52"
+    },
+    {
+      "name": "step72_yarn_opponent_sheep4",
+      "improved": 20,
+      "regressed": 1,
+      "minimum_delta": -895
+    },
+    {
+      "name": "step72_pet_cafe_opponent_wheat10",
+      "improved": 8,
+      "regressed": 3,
+      "known_wins_lost": 1
+    },
+    {
+      "name": "step72_farmers_market_opponent_cow0",
+      "improved": 9,
+      "regressed": 1,
+      "minimum_delta": -2595
+    },
+    {
+      "name": "late_multi_crop_seed_clipping",
+      "corpus": "v7_public_333",
+      "improved": 329,
+      "identical": 0,
+      "regressed": 4,
+      "known_wins_lost": 1,
+      "worst_counterexample": "episode 97001031: +121 to -105",
+      "result_sha256": "472b7c7291b2075c720f8ffb1cf8a24530950bb0c30007b8a7096f6b1b729755"
+    },
+    {
+      "name": "withdrawn_absolute_seat_gate",
+      "reason": "An audit found that absolute-seat indexing had hidden two seat-relative regressions.",
+      "counterexamples": {
+        "97801752": -17555,
+        "100857309": -8488
+      }
+    },
+    {
+      "name": "terminal_action_pruning",
+      "terminal_non_sell_market_orders_found": 0,
+      "measurable_gain": false
+    }
+  ],
+  "verification": {
+    "pytest": "77 passed",
+    "pip_check": "No broken requirements found",
+    "starter_both_seats": "720 states, DONE/DONE, win, no stderr",
+    "random_both_seats": "720 states, DONE/DONE, win, no stderr",
+    "package_review": {
+      "archive_sha256": "4b759b53b7e7ae81b7a1334208db82aacc8a0e1062546dab974843066648d8bb",
+      "archive_size_bytes": 122013,
+      "deterministic_rebuild": true,
+      "contents": [
+        "main.py",
+        "LICENSE-APACHE-2.0.txt",
+        "THIRD_PARTY_NOTICES.txt"
+      ],
+      "archive_main_matches_release_hash": true,
+      "archive_import_and_compile_passed": true
+    }
+  },
+  "source_artifacts": {
+    "v9_episode_manifest_sha256": "1ad9b14d3d1b2885f052c3849836cc1d3af3fcf4b02ac6c2e7a3599695d12b10",
+    "v9_episode_outcomes_sha256": "384db8a204a2182a078ab8a9743ba0b6212ba29ab13a59b940b8161eb0d1f0dd",
+    "v9_replay_validation_sha256": "da57bbe8aed259ab9eb0453311b859121cf784d16e96532d27c1e236e3f266e8",
+    "post_preregister_manifest_sha256": "d41f35e04107b4f712b00621df509db342cea8e239165db5e7696ea21224c42b",
+    "post_preregister_ledger_sha256": "59f13fe5694f9ce1826022525767995433258647f28c55f9bb08121cef35ab77"
+  },
+  "delivery": {
+    "code_git_sha": "5c1ffa466e8755857a87936e0a24b2d4461aa61b",
+    "code_pushed_to_origin_main": true,
+    "archive_sha256": "4b759b53b7e7ae81b7a1334208db82aacc8a0e1062546dab974843066648d8bb",
+    "archive_size_bytes": 122013,
+    "submission_id": 55848408,
+    "submission_message": "v10 fail-closed opening recovery 5c1ffa4",
+    "submitted_at_utc": "2026-08-28T16:08:13.067Z",
+    "remote_status": "COMPLETE",
+    "validation_observed_at_utc": "2026-08-28T16:10:25Z",
+    "initial_public_score": 600.0,
+    "score_2600_plus_observed": false
+  }
+}
