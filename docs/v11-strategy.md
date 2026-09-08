@@ -8,4 +8,3 @@ Release gate: syntax and package checks; both-seat seeded league against Wheat a
 ## Delivery
 
 The reviewed archive submission-v11-market-curve.tar.gz has SHA-256 df6a2de3fbc2bb174182069e5252b9e8434bbad963ce2e276c5d75d916986137 and contains only main.py, the Apache-2.0 license, and third-party notices. Its main.py matches Git commit 505f8133ce76abeff18782a02387fd28281770ce. Kaggle submission 56090534, message 11 fail-closed market curve 505f813, was uploaded on 2026-09-08 and is currently PENDING; validation and score are not yet claimed.
-
