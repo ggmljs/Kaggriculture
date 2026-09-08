@@ -497,3 +497,26 @@ at commit `ae0e80bb4a18a40c60ca514f0ce9d8f2a4c338af`.
 
 - Preserved V10's official-default actions while accepting only complete, public, valid custom market curves for SELL-order ranking; malformed or absent curves fail closed to V10 defaults.
 - Added an open-loop, both-seat replay regression gate for future candidate screening. It is a regression screen, not a live-score forecast.
+
+### V16: leader-aware conservative market queue — 2026-09-09 (current)
+
+- Rejected the initial interpretation of unsupported cross-product
+  `BUY_PRODUCT` requests after interpreter inspection and frame-by-frame state
+  differences proved they are silent no-ops. The promoted queue therefore
+  front-loads executable sales but leaves legal restocking in place and never
+  inserts unsupported padding by default.
+- Added a fail-closed, public-tile opening profile that redirects the vulnerable
+  10C/4S route against the cow-heavy leader layout unless early Pizza demand
+  supports milk. Malformed rows now return no match rather than raising.
+- The final `main.py` SHA-256 is
+  `e3df9435cffe67a75ae908a1c888240b30546e4a1a86cba62904fe34e2cb4f2f`.
+  Eighty tests passed; starter and random smokes reached 720 states and
+  `DONE/DONE`. A 40-game five-opponent closed-loop panel was clean, and 12
+  both-seat top-six replay comparisons had zero margin regression. See
+  `docs/v16-strategy.md` for evidence boundaries.
+- Code commit `85aae5c042b23d9da45a0f5c4a57e6b2e24c2016` was pushed to
+  `origin/main` before upload. Kaggle submission `56103627`, message
+  `v16 leader-aware conservative queue 85aae5c`, reached `COMPLETE`. The
+  125,637-byte archive SHA-256 is
+  `78ecfb3e3938117bdad1109eccc0a3f47f5666178c22889b2126b7cb2decc289`;
+  its initial dynamic score was `600.0`.
