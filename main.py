@@ -1189,6 +1189,64 @@ def _v8_route_label(obs, state):
     return decision
 
 
+def _leader_opening_profile(obs):
+    """Detect the leaderboard leader's distinctive public opening layout.
+
+    The leader opens 5 COW + 1 SHEEP with an 18-wheat field, visible from day
+    one; the frozen pool and most public agents open cow-light/sheep-heavy
+    instead.  Only public tile state is used.  Returns True/False, or None
+    when the opponent tiles are not readable.
+    """
+    try:
+        farms = list(_get(obs, "farms", []) or [])
+    except TypeError:
+        return None
+    if len(farms) < 2:
+        return None
+    opponent = farms[1 - _seat(obs)]
+    tiles = _get(opponent, "tiles", [])
+    if not isinstance(tiles, (list, tuple)):
+        return None
+    counts = Counter()
+    for row in tiles:
+        if not isinstance(row, (list, tuple)):
+            return None
+        for tile in row:
+            if not isinstance(tile, dict):
+                continue
+            value = tile.get("animal") or tile.get("crop")
+            if value:
+                counts[str(value)] += 1
+    if not counts:
+        return None
+    return (
+        counts.get("COW", 0) >= 4
+        and counts.get("SHEEP", 0) <= 2
+        and counts.get("WHEAT", 0) >= 12
+    )
+
+
+def _leader_aware_label(obs, state, step):
+    """Suppress the 10c4s milk route against leader-profile opponents.
+
+    The 10c4s route ties or beats the frozen pool (mirror-like agents) but
+    loses badly to the leader's tape unless PIZZA_SHOP demand is present.
+    Routing therefore stays unchanged by default and only demotes 10c4s to
+    the 8c6s default when the opponent shows the leader's cow-heavy opening
+    and no pizza demand justifies the milk route.  The opening profile is
+    cached by ``_select_route`` during steps 24-96 regardless of the current
+    label, because milk-support shops may unlock only after that window.
+    """
+    label = _v8_route_label(obs, state)
+    if label != "10c4s_3q":
+        return label
+    if not state.get("leader_profile"):
+        return label
+    if "PIZZA_SHOP" in _public_shops(obs)[:3]:
+        return label
+    return "8c6s_3q"
+
+
 def _v7_legacy_layout(obs):
     seat = _seat(obs)
     farms = list(_get(obs, "farms", []) or [])
@@ -1271,6 +1329,10 @@ def _select_route(obs, step):
         state["v5_shops"] = _public_shops(obs)
     if state.get("legacy") is None and 24 <= step < 72:
         state["legacy"] = _v7_legacy_layout(obs)
+    if state.get("leader_profile") is None and 24 <= step <= 96:
+        detected = _leader_opening_profile(obs)
+        if detected is not None:
+            state["leader_profile"] = detected
     if step == _V10_V5_GATE_STEP:
         decision = _v10_should_use_v5(obs)
         if state.get("v5_gate") is None:
@@ -1280,7 +1342,7 @@ def _select_route(obs, step):
             state["v5_gate"] = False
     if state.get("v5_gate"):
         return _v10_v5_route(state, step)
-    state["label"] = _v8_route_label(obs, state)
+    state["label"] = _leader_aware_label(obs, state, step)
     label = state["label"]
     if state.get("legacy"):
         return _V7_LEGACY_ROUTES[label], _V7_LEGACY_SALES[label]
@@ -1613,6 +1675,254 @@ def _v5_market_finalize(action, obs):
     return action
 
 
+import os as _os
+
+_ENABLE_WHEAT_FEED_GUARD = _os.environ.get("KAGGR_WHEAT_GUARD", "0") == "1"
+_ENABLE_STRAWBERRY_FLOOR = _os.environ.get("KAGGR_STRAWBERRY_FLOOR", "0") == "1"
+_ENABLE_MARKET_QUEUE_V16 = _os.environ.get("KAGGR_MARKET_QUEUE_V16", "1") == "1"
+_MARKET_QUEUE_BACKLOAD = _os.environ.get("KAGGR_MARKET_QUEUE_BACKLOAD", "0") == "1"
+_MARKET_QUEUE_PAD = _os.environ.get("KAGGR_MARKET_QUEUE_PAD", "0") == "1"
+_STRAWBERRY_FLOOR_PRICE = 100
+_STRAWBERRY_FLOOR_UNTIL_STEP = 640
+_FEED_GUARD_UNTIL_STEP = 700
+
+# Strawberry prepay: leader replays show strawberry is scarce (price rising
+# well above the $120 base) through roughly day 21, after which combined
+# player supply crashes it toward the floor.  Selling the route's scheduled
+# strawberry volume a few days early captures the scarcity premium.
+_ENABLE_STRAWBERRY_PREPAY = _os.environ.get("KAGGR_STRAWBERRY_PREPAY", "0") == "1"
+_STRAWBERRY_PREPAY_MIN_PRICE = 150
+_STRAWBERRY_PREPAY_PEAK_RATIO = 0.92
+_STRAWBERRY_PREPAY_HORIZON = 144
+_STRAWBERRY_PREPAY_START_STEP = 240
+_STRAWBERRY_I0 = 10000
+_STRAWBERRY_PREPAY_STATE = {
+    0: {"last_step": -1, "prepaid": 0, "peak": 0.0},
+    1: {"last_step": -1, "prepaid": 0, "peak": 0.0},
+}
+
+if _ENABLE_STRAWBERRY_PREPAY:
+    _FR_ITEMS = tuple(item for item in _FR_ITEMS if item != "STRAWBERRY")
+
+
+def _strawberry_prepay(action, obs, step):
+    """Sell scheduled strawberry volume early while scarcity prices last."""
+    if not _ENABLE_STRAWBERRY_PREPAY or step < _STRAWBERRY_PREPAY_START_STEP:
+        return action
+    seat = _seat(obs)
+    state = _STRAWBERRY_PREPAY_STATE[seat]
+    if step <= int(state.get("last_step", -1)):
+        state = {"last_step": step, "prepaid": 0, "peak": 0.0}
+        _STRAWBERRY_PREPAY_STATE[seat] = state
+    state["last_step"] = step
+    action = _copy_action(action)
+    market = [list(order) for order in (action.get("market") or [])]
+
+    # Repay earlier prepayments against this step's scheduled sales first.
+    prepaid = int(state.get("prepaid", 0))
+    if prepaid > 0:
+        for order in market:
+            if len(order) >= 3 and order[0] == "SELL" and order[1] == "STRAWBERRY":
+                reduction = min(max(0, int(order[2] or 0)), prepaid)
+                order[2] = max(0, int(order[2] or 0)) - reduction
+                prepaid -= reduction
+    state["prepaid"] = prepaid
+
+    prices = _get(_get(obs, "market", {}) or {}, "prices", {}) or {}
+    inventory = _get(_get(obs, "market", {}) or {}, "inventory", {}) or {}
+    try:
+        price = float(_get(prices, "STRAWBERRY", 0) or 0)
+        market_inv = int(_get(inventory, "STRAWBERRY", _STRAWBERRY_I0) or 0)
+    except (TypeError, ValueError):
+        action["market"] = market[:10]
+        return action
+    peak = max(float(state.get("peak", 0.0) or 0.0), price)
+    state["peak"] = peak
+    if price < max(_STRAWBERRY_PREPAY_MIN_PRICE, _STRAWBERRY_PREPAY_PEAK_RATIO * peak):
+        action["market"] = market[:10]
+        return action
+
+    already = sum(
+        max(0, int(order[2] or 0))
+        for order in market
+        if len(order) >= 3 and order[0] == "SELL" and order[1] == "STRAWBERRY"
+    )
+    end = min(len(_ACTIONS), step + _STRAWBERRY_PREPAY_HORIZON + 1)
+    scheduled = 0
+    for future in range(step + 1, end):
+        for order in (_ACTIONS[future] or {}).get("market") or []:
+            if len(order) >= 3 and order[0] == "SELL" and order[1] == "STRAWBERRY":
+                scheduled += max(0, int(order[2] or 0))
+    scheduled = max(0, scheduled - prepaid)
+    if scheduled <= 0:
+        action["market"] = market[:10]
+        return action
+
+    projected = _v5_projected_shed(obs, action)
+    available = max(0, int(projected.get("STRAWBERRY", 0) or 0) - already)
+    headroom = max(0, _STRAWBERRY_I0 - market_inv + 10)
+    quantity = min(scheduled, available, headroom)
+    if quantity <= 0:
+        action["market"] = market[:10]
+        return action
+    existing = next(
+        (
+            order
+            for order in market
+            if len(order) >= 3 and order[0] == "SELL" and order[1] == "STRAWBERRY"
+        ),
+        None,
+    )
+    if existing is not None:
+        existing[2] = max(0, int(existing[2] or 0)) + quantity
+    elif len(market) < 10:
+        market.insert(0, ["SELL", "STRAWBERRY", quantity])
+    else:
+        action["market"] = market[:10]
+        return action
+    state["prepaid"] = prepaid + quantity
+    action["market"] = market[:10]
+    return action
+
+
+def _placed_animals(obs):
+    seat = _seat(obs)
+    farm = _farm(obs, seat)
+    total = 0
+    for row in list(_get(farm, "tiles", []) or []):
+        for tile in list(row or []):
+            if isinstance(tile, dict) and tile.get("animal") in (
+                "COW",
+                "SHEEP",
+                "GOOSE",
+            ):
+                total += 1
+    return total
+
+
+def _wheat_feed_guard(action, obs, step):
+    """Stop the sell-wheat-then-buy-feed churn seen against the leader tapes.
+
+    Attribution against the leader's replay shows the route sells its wheat
+    harvest and then buys nearly the same volume back as animal feed, paying
+    the market impact on both sides (~37k of feed purchases per season vs
+    ~2k for the leader).  The guard keeps a three-day feed reserve hysteresis
+    band: sells are trimmed when projected stock would fall below the
+    reserve, and feed buys are allowed only to refill from the low-water mark
+    back up to the reserve.  Disabled near season end so terminal liquidation
+    still clears the shed.
+    """
+    if not _ENABLE_WHEAT_FEED_GUARD or step >= _FEED_GUARD_UNTIL_STEP:
+        return action
+    animals = _placed_animals(obs)
+    if animals <= 0:
+        return action
+    projected = _v5_projected_shed(obs, action)
+    stock = max(0, int(projected.get("WHEAT", 0) or 0))
+    reserve = 3 * animals
+    low_water = (3 * animals) // 2
+    action = _copy_action(action)
+    market = [list(order) for order in (action.get("market") or [])]
+    sell_allowance = max(0, stock - reserve)
+    sold = 0
+    for order in market:
+        if len(order) >= 3 and order[0] == "SELL" and order[1] == "WHEAT":
+            requested = max(0, int(order[2] or 0))
+            kept = min(requested, sell_allowance)
+            sell_allowance -= kept
+            sold += kept
+            order[2] = kept
+    if stock - sold >= low_water:
+        buy_allowance = 0
+    else:
+        buy_allowance = max(0, reserve - (stock - sold))
+    for order in market:
+        if len(order) >= 3 and order[:2] == ["BUY_PRODUCT", "WHEAT"]:
+            requested = max(0, int(order[2] or 0))
+            kept = min(requested, buy_allowance)
+            buy_allowance -= kept
+            order[2] = kept
+    action["market"] = market[:10]
+    return action
+
+
+def _strawberry_price_floor(action, obs, step):
+    """Hold strawberry sales while the shared price is below the floor.
+
+    Strawberry crashes to the $1 floor under modest gluts (linear above,
+    target 1.6, T=100).  The leader only sells into recovered prices.  Sales
+    are released when the shed is nearly full or late in the season, so stock
+    is never stranded; terminal liquidation handles the final turns.
+    """
+    if not _ENABLE_STRAWBERRY_FLOOR or step >= _STRAWBERRY_FLOOR_UNTIL_STEP:
+        return action
+    prices = _get(_get(obs, "market", {}) or {}, "prices", {}) or {}
+    try:
+        price = float(_get(prices, "STRAWBERRY", 0) or 0)
+    except (TypeError, ValueError):
+        return action
+    if price >= _STRAWBERRY_FLOOR_PRICE:
+        return action
+    projected = _v5_projected_shed(obs, action)
+    if sum(max(0, int(v)) for v in projected.values()) >= 90:
+        return action
+    action = _copy_action(action)
+    market = []
+    for order in action.get("market") or []:
+        if len(order) >= 3 and order[0] == "SELL" and order[1] == "STRAWBERRY":
+            order = list(order)
+            order[2] = 0
+        market.append(list(order))
+    action["market"] = market[:10]
+    return action
+
+
+def _market_queue_v16(action):
+    """Front-load executable sales and back-load dynamic-price restocking.
+
+    The environment processes the two players' market lists by index. SELL
+    orders benefit from executing before earlier supply can depress the quote.
+    WHEAT/FERTILIZER BUY_PRODUCT orders often benefit from executing after the
+    opponent's sales. Unsupported product buys are stable no-ops in 1.32.7,
+    so they can occupy unused queue indices without changing game state.
+    """
+    if not _ENABLE_MARKET_QUEUE_V16:
+        return action
+    action = _copy_action(action)
+    sells, fixed, restocks = [], [], []
+    for raw in action.get("market", []) or []:
+        if not isinstance(raw, list) or not raw:
+            continue
+        order = list(raw)
+        if order[0] in ("SELL", "BUY_PRODUCT"):
+            if len(order) < 3:
+                continue
+            try:
+                order[2] = max(0, int(order[2] or 0))
+            except (TypeError, ValueError):
+                continue
+            if order[2] <= 0:
+                continue
+        if order[0] == "SELL":
+            sells.append(order)
+        elif (
+            _MARKET_QUEUE_BACKLOAD
+            and order[0] == "BUY_PRODUCT"
+            and order[1] in ("WHEAT", "FERTILIZER")
+        ):
+            restocks.append(order)
+        else:
+            fixed.append(order)
+    prefix = (sells + fixed)[:10]
+    restocks = restocks[:max(0, 10 - len(prefix))]
+    if restocks and _MARKET_QUEUE_PAD:
+        target = 10 - len(restocks)
+        while len(prefix) < target:
+            prefix.append(["BUY_PRODUCT", "CARROT", 1])
+    action["market"] = (prefix + restocks)[:10]
+    return action
+
+
 def _terminal_liquidate(action, obs, step):
     """Top up final-turn sales to the actual same-turn projected shed."""
     if step < 718:
@@ -1671,6 +1981,10 @@ def agent(obs, config=None):
         ):
             return copy.deepcopy(cached["action"])
         _ACTIONS, _META_SALES = _select_route(obs, raw_step)
+        _force_route = _os.environ.get("KAGGR_FORCE_ROUTE", "")
+        if _force_route in _V7_CURRENT_ROUTES:
+            _ACTIONS = _V7_CURRENT_ROUTES[_force_route]
+            _META_SALES = _V7_CURRENT_SALES[_force_route]
         if len(list(_get(obs, "farms", []) or [])) < 2:
             return {"farmer": ["PASS"], "hands": [], "market": []}
         step = min(
@@ -1708,9 +2022,13 @@ def agent(obs, config=None):
         action = _align_hands(action, obs)
 
         _meta_front_run(action, obs, step, meta)
+        action = _wheat_feed_guard(action, obs, step)
+        action = _strawberry_price_floor(action, obs, step)
+        action = _strawberry_prepay(action, obs, step)
         action = _v5_prune_terminal_wheat_seed(action, step)
         action = _v5_market_finalize(action, obs)
         action = _terminal_liquidate(action, obs, step)
+        action = _market_queue_v16(action)
         _meta_remember_market(obs, step, action, meta)
         if signature is not None:
             _ACTION_CACHE[seat] = {

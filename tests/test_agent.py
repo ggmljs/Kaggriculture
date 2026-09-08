@@ -1544,3 +1544,49 @@ def test_alternating_seats_keep_route_schedule_and_cached_action_isolated():
 def test_invalid_observation_fails_safe():
     reset_controller()
     assert agent({}) == {"farmer": ["PASS"], "hands": [], "market": []}
+
+
+def test_market_queue_front_loads_sales_without_backloading_restock():
+    action = {
+        "farmer": ["PASS"],
+        "hands": [],
+        "market": [
+            ["BUY_SEED", "WHEAT", 2],
+            ["SELL", "MILK", 4],
+            ["BUY_PRODUCT", "WHEAT", 3],
+            ["SELL", "WOOL", 5],
+        ],
+    }
+
+    queued = submission._market_queue_v16(action)
+
+    assert queued["market"] == [
+        ["SELL", "MILK", 4],
+        ["SELL", "WOOL", 5],
+        ["BUY_SEED", "WHEAT", 2],
+        ["BUY_PRODUCT", "WHEAT", 3],
+    ]
+    assert action["market"][0] == ["BUY_SEED", "WHEAT", 2]
+
+
+def test_market_queue_drops_nonpositive_executable_orders():
+    action = {
+        "farmer": ["PASS"],
+        "hands": [],
+        "market": [
+            ["SELL", "MILK", 0],
+            ["BUY_PRODUCT", "WHEAT", -2],
+            ["BUY_SEED", "CARROT", 1],
+        ],
+    }
+
+    assert submission._market_queue_v16(action)["market"] == [
+        ["BUY_SEED", "CARROT", 1]
+    ]
+
+
+def test_leader_profile_fails_closed_on_malformed_tile_row():
+    obs = make_observation(step=72)
+    obs["farms"][1]["tiles"] = [1]
+
+    assert submission._leader_opening_profile(obs) is None
