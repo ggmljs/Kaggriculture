@@ -492,3 +492,8 @@ at commit `ae0e80bb4a18a40c60ca514f0ce9d8f2a4c338af`.
   rollback.
 - Keep pull requests focused; do not combine unrelated topics in one pull
   request.
+
+### V11: fail-closed market-curve adaptation — 2026-09-08
+
+- Preserved V10's official-default actions while accepting only complete, public, valid custom market curves for SELL-order ranking; malformed or absent curves fail closed to V10 defaults.
+- Added an open-loop, both-seat replay regression gate for future candidate screening. It is a regression screen, not a live-score forecast.

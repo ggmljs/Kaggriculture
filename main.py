@@ -1435,6 +1435,64 @@ def _v5_market_finalize(action, obs):
         "WOOL": (200, 10000, 105, "log", 0.2, "sq", 3.2),
         "FERTILIZER": (100, 10000, 200, "linear", 0.4, "linear", 0.4),
     }
+    # Local defaults preserve the public curve. A complete curve supplied by
+    # a custom environment wins, keeping sale ranking valid when the evaluator
+    # changes its market configuration.
+    config = _get(obs, "config", {}) or {}
+    curve_sources = (
+        _get(obs, "marketParams", None),
+        _get(obs, "market_params", None),
+        _get(config, "marketParams", None),
+        _get(config, "market_params", None),
+    )
+
+    def valid_curve(value):
+        if isinstance(value, dict):
+            value = (
+                _get(value, "base", _get(value, "basePrice", None)),
+                _get(value, "equilibrium", _get(value, "equilibriumInventory", None)),
+                _get(value, "scale", None),
+                _get(value, "below_func", _get(value, "belowFunction", None)),
+                _get(value, "below_target", _get(value, "belowTarget", None)),
+                _get(value, "above_func", _get(value, "aboveFunction", None)),
+                _get(value, "above_target", _get(value, "aboveTarget", None)),
+            )
+        if not isinstance(value, (list, tuple)) or len(value) != 7:
+            return None
+        try:
+            base, equilibrium, scale = (
+                float(value[0]), float(value[1]), float(value[2])
+            )
+            below_target, above_target = float(value[4]), float(value[6])
+        except (TypeError, ValueError):
+            return None
+        below_func, above_func = str(value[3]), str(value[5])
+        known_shapes = {"linear", "sq", "sqrt", "log", "log10"}
+        if (
+            base <= 0
+            or equilibrium < 0
+            or scale <= 0
+            or below_func not in known_shapes
+            or above_func not in known_shapes
+        ):
+            return None
+        return (
+            base,
+            equilibrium,
+            scale,
+            below_func,
+            below_target,
+            above_func,
+            above_target,
+        )
+
+    for source in curve_sources:
+        if not isinstance(source, dict):
+            continue
+        for item in tuple(params):
+            curve = valid_curve(_get(source, item, None))
+            if curve is not None:
+                params[item] = curve
     inventory = _get(_get(obs, "market", {}) or {}, "inventory", {}) or {}
 
     def shape(name, value):
