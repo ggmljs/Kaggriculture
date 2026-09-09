@@ -1964,7 +1964,7 @@ def _terminal_liquidate(action, obs, step):
     return action
 
 
-def agent(obs, config=None):
+def _baseline_agent(obs, config=None):
     """Return the V9 action for one Kaggriculture observation."""
     try:
         global _ACTIONS, _META_SALES
@@ -2047,3 +2047,140 @@ def agent(obs, config=None):
             ],
             "market": [],
         }
+
+_RES_DATA = 'c-rlq34Baf+rZCcM(q-%wG%XLY(@EOl{u5xmyn1x2|^+fAt)OAOsiC@wU$;XzVa1sm1vbva<j~&N^Pa+rxb7Bx2j62Ri!We?wN6KX6BxmOt1Tl<oiAO{rs{>PtE^6^PFdYEILAlkRUxt_^eyV-g5MCSY=A&4+~v9pr6zCCfafFKaI|Rj(quLnD~3f3TGO3X1~!SKG3)%?^c-fU&JrTGfH1qII}TqN#3-upXd2{=0@(Bn<gDloVojrw(^-j-@hpT{e_6njqLlcQkv6&>nqWkFSIrir;q=Xe^IzoC6@k~WfpoqGlp(kn3sJlx*z><_welL8{+9Z5pgtkYjc`AwNZA$nqKt8gc`Kw`Wwcu&1LD6=gx<f*))wF3hqdW;=@GQYjFG_B*=h-fe8l?%MK(AOE@^1OZd4ZL%h=1-s6&ju;XV+!i=2wdtnEnhG_QGq%(aXym)vu1>qVk%|efzBkcsO9lFz$BV~lpL;dOWn`uJjuhV40jC{+tdeeWOX)6r)IFTv|Tb$2*@NaP<tRtp2NEncC9Z^d(={hkhnf4f(?n3yZbl2~dghv@2uR6m1`C4=bkx*ax{}xtZi2OBsH#1VjohkjRL~=f#`Q~fEoOi0@V{Two$|y4};r@5lduE|*m1Np{X1XwN(;#~K&VuYqNBYw43yv8tHLOo9`WX6W-S+g?*UiH7S7T|j_d;mgxqpS#Z!%1%x+abq?wIL>`rRJ<n=Q_-%Z0dl!fI$hJhhTeSk%Kg^}F)4M8v?sn%zp$JKFa%wbc^5o6dG>t}uGg2w6+8&qK@hRcMK>4SNa8dpmBxxbpGziP`1dZ#pMU;Y?T7!<GtM!ov1w&1pcKsg^LaA>zu6qV4xB%6@G}4_Oa0z57SE1etJ_B~@5<C5rCMSZB<M>Fj~9Gu0v;jD-C`xQ>BXj&<Sb;dSE^ywYH=&Yeb^HlHveoh2RWPGial?ay3p>_jjA_NM*kQ;u$OA<Vu{Ty%@8hj0F678dLrM|T?L2<QKZr$3FHDTFj0L9h0yNXrLKHcEQ<+UB`JNQI$x8)DB#Psp~!=NHVh-~%1y*bgq$JrjnY0rAvIJYhYt97Gv@B!p3hHPaI06E5Kk&!uZl!|>w-zY@OqTV?8r@IaC9__VR~negF4M)Lu*>$qmZxU13jo2<pbH8SDcK(kPzKuNgzMQ6e;)|yLP!ZTqA8W2yd#1j^^#D^%ukAyJFux5k_pYZvl5t`9x62HVA%iXj#R`WB<uXvtIn0?Lu{PW;XT*3#AI=tq4BI&|PYv`(~sX}V=A$Ed24)2l)vv>uIt*yGQrxkD1qFdG$8n4c)OM9I&(@oV39B;!pK5Q|v2>jwMJfCj<f+(*vu0>~gjZ5(Suj0=1r%xA<YZh)rkGA`8E9&;5f3^8GJ29|79d)9)u<FAx3ZHKMyVr~h&pqwMr*rn@Tz$HQD8sNaOkPqY!)oLW;(bvXWZ1%$;Sb*#q4})@ai&_2<9ktdyDdwV<HNUdM+#5<I7lJG(oOf>yg!WBLmP2C4ik0Fakxf*kT5i1rX{9y!RRGmd>9Es$A?9GI1RM~q#j1Xejwb5OBlj-g|M+b5oTXE%n7HD+#c2u5{y0_pgqh8S4NKm*5e=tBT!4gYKf>^tVjW@ND=Mf#d!}$*moKbPpvc%KFB4Ud2yiTgdxsUOZfHQ=h|y8_coj^jQe3IU0?4h;hpx;4!!$AnxcL<uWoN+kJ{a7t(CtS*CyAX%KBlKOsM=bB<v5u;rTqm*Y5W9S|=&Ja_Jq-ZlSFD^PTD>&$!e{G9tyDnN`1xRL|-2nXQFT`OK&rr{uqn&3%&I`k(^cT)!-raIJa{Eg^Z$l9o7qJ3?5QoFWru-!m<-C9omA{rX$Rv*{Cr@LKUSy!I^mWNsVkS~twCy;Mn94GoB=RvHK=atTA!t3%Y)tJM;Itbr$s@_F`f{^n_#*{;l!V86fRzo%&)mpHQA#I=Xn&)D~jGV3yMw}<CF$TffeuL8TrF=)k9;qm8U8EJZ@^+DMl7C#HwE&9{zKeiIq$0pLp+PrL>@J1ged)PhC>>8h7gqLs$H&{8*>pNPiO=p(B^y<ZTw`^(g>eb&rKGCNdc=2qX&m291I>~T?iwyUR(R=hb<~|^NcS?#~OGq{FKaKs5F=^oM#@?nB+Nf0k4We^|!q*1V=s|VqQQc8vyO$aWafPw8_Z>5xv;U7US8I(>_r4_0gdu1^Jhf6l*s>)bqnCiuOC;<E!n?SHA#Npz+tV9icFTDp?9ZF-_k64j1gu;0NEj;vwIdv8<q=+%JYI7e5NE2@!>6vBg|TlZ(y03)!G^PFqk|KL9s$EV#)oeYeVo2Lp$s*@87f59iK9+6@NPQT+3T?Pgd$;3!a;gM9=Bo^2{2D*K*GR;MQg1dmvGJ#{fmjM%~!<MW>tSyJ~{u^7Ng|vG5?E2aC|+p$Rcw+b5`~3iZlN`qdk|f6kB86<2=Gy^;{!AQfw{ay&$30#zdL$tL;16V{6Px`>0<y9e1juP_=s;UH!w%2eCC?<i{np_K<}C4h@K>R?-QJH(gFWD|Rdb_S1PJj2(;G5Eg9-QzI+Z{D9gLNEo`R%GA_~xn{szGZF?S%&J>kqSp)=mq5bMghj8p6%t0mr8%~yBRQ?DSdjuc_mT{-Vs$I%M7xV`SaCWo+;m(v!6Va(RaKz5<_#ZPv5y0;k3+O2Hta<i29{x~6(@KA%CMd!+_YltC17QsN5WWpsTpDNrxokg0QIne<otz%feGtusD}Zygh#@thczOsBa@!9VRb8D?WIS;Sly}(VYb_=iw!3!0nVy2AYov_D8nejrG4I-jzsmhVPzm-WuQmGSQ)4pVKUN&9gBb+i%1xLW}qd(h8q9@Hvp<8j2i%bBy1oTQHDz<VU%GXw^-`QhBO=24+B<cBVl;L#A3sFYk<?h3`iK5uxc5`iFVL3jD&q7EPBlwUbSHjJYbgr5{4(daIp<50|BR$8_4u!Xb(f$!$=sqCsap*SJ|)z9#Bi@Nx8SVG7Qnx0?~a_(mQ2DErEn#2?vlX8;~$0VI3ivNEou8PDdtXVvYkc$Dx`q<~V#NeB~6@z{6H(dmxN8@Y)a-Z@Q?nHk=s<IF(UHEZ^90?j<PUphC<dLFPDA6UH2e&w08iQh<6GP)it)Ffd^~$q6XHn+{ZlkudCpXC2v8wE$<N0CtY+h_zY)_U6M8X12tH0-U!7IB(5>gn<d`Ny5Ye+&K;^!$=sK@V-l2!VptHA*Pl3LYUbSk8HB2p5!56V8ZYJP=M2M0SOzBFfic&vf;C?Ji-lHMrt0tgg8@e^fERi!=BCW8<!w_92+CwbnJ5ojgtwp8;)i3rRZhSzUjh(@y^jp7s770or!Ip+K|O1d^JFOc?+=(ek9w|czRfh53@MLsB?W}!i@Y8Q@Tu;$@Y+iee4@inywg0`SlXcc{*3Sf=ww;L&AWB*`)pMU3qbdDwif}9+wCUd_l7_S<R1oT!Lu?XTsiQRZTwP*xD1GXBN)f8zbkM56#&aHez3Ixn6?RWU?74;*+4Q*Oj9`KfThpwM|bt@jIyoUa_smB{m^y3DTJ>!w~WY@xD-d)A><`EgiWs3?Xk2?+Z^d%xWi?471y>enzcFCc|vkZEG&!*{M@}ik82-x|YusP+OL1f2P{1s?<LnRaI9{nT2L2lI4kZ8J!LrcgF`)PZio_Z^UGO+F_VeRh5gS<~CW$Q7>_+3r|aQ3eesj?xaFXK*iQ_8qXFYe~Gti0j4D+d)Qq|NcOO#C6sXqXZcmy#*FZBRfN^hfOu*poiMW{^1JY~#G0nbn(ATpu7)^MZ9iSJyJkUmI*FdVZx#;EG~06-Bi<Wm@6%}4ubiwUMpc_DOzks-Hdx(=#+@5utg_^av2lYCw|+Vkb=AL4oia!mns5NI?BNoIxRoGoPj5FJvn4!bLj85qu{rPyxrB`w<208yh%?p7FzfP4{4$Ncve_&oM<&s^H_bv?-bxz!#71M@yjC*dUjk<f^K66Yyl<<}Id4_;Fwsux@=|8?nU+AppoCF|QHK8?$ndLZOF-HZNEn{5<s~lRA2L(C(r~<L*VtNdG%~Fz#rSl6!<_vhNWujVCW}hen$$V&t|g>yFV9-Sc_OZI?>LLCAz@&`WG<KR=+TokqrpfpA|ITcq?wkG&h&*a&*Rv1+o2_fE}AQZogPWI-N_Jk$Hpn9AF$~(GjgJ7%|?XQ+g0E0c?6v<FuH09mzabLZ5Dx_jj=V@*czG91#=vLnNU%NlQ4P-8NC#(wM4EShPag=Zcnv(*q=AuC@x`$TM6R!^hS8_)cYQ734h&mjBpE-VL%yXdbk-^5AS|IN_(9Nai&T=9A0~tu<4aJRvjgLaVJ*3>6kulRybPL!)!{}sKiKmtU>^tdZmsRJzVs<kgz`qGcD1St0g+j*1oo3chY3P&b{>3i?r}TFOsxV#`L{e_($iZ^v;x}*-bl*khO&Qa=5()UfRde_KTCo&sMgfPW$PIa*|z<)?l_o2>Nu8H=Rg02yF>SuURA<z}3U2YQ<=-GmASDs`k>`+{-lu$->f?2g-Vw>D^;wjH2uI@UFea@X&UgxtEIW824N=xgWuk;k(OIHO~w0ZjkD0ue5xoG`C9Ys;cWd9Q*0!U!5bY{$;qFYi2T9Sn;f)CsZVFpH;=`+zxdd?mnx^jk0X9QAYSTE@2275Kqk)!aP0fFT%`PyBxvO60;+;?|nOOE;&7+CqHmlYwleJdm5z++uDs+#3k4)m6Mf*7ZdqW=wrLJ_Ayt6SJ}pCZdpN`sWt*%=Du0Tr73jfJ+tun`V3iy-ETUnx>cG|uFN92Y)hlOswyN5N?6nq?{f(cNq<puoq2Emi#|<yl%{q--gFc0IIK1IiFTqM7QXppv?80obH}aDH>*U`t#KEPzin>jR#j!9ygno;$I+9khi_ljexf+UnGYL*k32L(sQv3OSr30caj39ida6PXo6@ToXC(LL^)(ZvEnM`0guw}m9!F?|8jnMbcL3qV+&a;+M0*@;YfsGxjI9AiFOe`bVHWv8!brF@N8m-mrd;g01?*T9_3%4f!ZVs{zaJdpOtn6pv{UBYzsy2%rv)<Mt9>fc@_~~T@nOlQV{_sc+y0BX)(`V!7zz7{u&5<6b1^Of7?(i8ejseh!(20Lu6Zn%Fa!;Vr>0hh{YiLw9?qA5osqIQkLPhfWPBhpQ>7t`RESyvSWD>h(H@4ihmkNOVWx*4&*$mkrFA1U-_{3l=EF{9WK$Sf1YX(z=$_-q-JfW`>7;rI50M`a6LK9{BtGF-z4kO9&Qwb{AlG3_NQBwv{~Q{kxamfnXl{?Kc_*ysYevF;CHypM31BVJDj#bv0W+aGLOSGQHXksXkA(eEk-{aM&~cFFG~S&ysKoR&OM3Xi$r$17+fnjO*FR;7U>Q6?G2wYfPU8cihX;G}nklcsmDR2F<9ZxX2hug)nwk{t{Y>e<VZZO|nQAw&zOvI%KP*LlqzN9<G%#rsYl!}AHtTC<pT8PC((XM6y;jwE6Dv_heu_Rb86MA-VF-DHcwdxs8D@khaS7KRroCkaai&_rUwk)*tA`nJ`t4YmF#F!Q23~1P6vfe$Upr(N2}2W}$|YQRn|AMLsWS`W%!joln61FJr?Ke<iGls;qBE0)(YMDd?BSgm>x?-uooQa(-r1QIhf$@L;PrAKVgC@G!6m$P?O@GmK%A+Tu%)`=reg$mP47puERNoMcP$~^bdo)+B<yMH6cY9iVP+4{<l4g!Jr@wYA!_^S{ME<7=B>TVC0sQkN%NhapY%%d>n2u~-|*BabL;`(L$}PrKe~;VD^i$O+~VLGImf~FhhBJVfV{P*W+Nh8TOCXHe(Ss^R8f^8+Z9ZP7jOwf_+JoyVkz+HEDO1MIP9|ayOoPOQ~H;B+5xTQzUGZRX4td&higm{25uT8$A{hbH8VSz>ES6SHg^7NRW!>rXXi%5I_+zA|8SONNAz-eK2~T0*1#iS_&Gn875Uih1={Upc^k7xkP|%g#IggeHArhsl;OQx!uw8WzvF)2*V8neXy;DYx%QI%%-cSW!h4PiZK-Zevew#`dtR8Imn?f6w{k}c<tj%pTVnsQwS$<RrhP^(F)sRFiLlasa3;;PL>}s4NIfii90mEfi4}AcEBS&;xNYVD&1pcKsh04b?T+XrliA0fjr16Smpl%semLrW6CturoD*S}56Y>RupG|EIX`d}+DwMOQsp(P@o*tL@sjQ}Gh5;s*Oq{=tRO5vZ}r2>TJuyt>@RDL$#5a+VL(01JdT?fy#$P2GQwr7II9YFR#iDGw=ys$+A9s|j+f-imv?k=XZll1{MvVpeU|~#0@e=QWi7!xkT!v7iVAJkXLnTB&y$wmJ!OfoNgZJ|G$5W@Nhe%KBwUHBCHhv&(A<{DJNROW=|yUC&#@=;negF4M)Lvkr2W&kBZQU7DT<y@QA_NnF-3K2Mg4R<JEG`o&x9dpKs>b)PguO^YFN=82F*2FYFcsn0bJKDi%ZnDV)PQUQ^r)^ioN-OksptQF;Ayap3XpWg1LGaBI5&*nNmB!!(Uk>X00`};v^-|8QMq~lrXa;p0Q&6Fkpo?681xdb`vY^MFQN5q$4>^t=M%7*s&-QZf3<^B*0!IQ4cq_;sg)42_8%jx3FSmAYiUp^qO0smH^Zeb@U{MFT+@SsZs5vj*wQUhao2^iCW@0D^3FgoCb!3feEw7&+}Y846%V7VpF`@$dA9ay0bhTpYUt8$(no35NE3On%6yutu>#SZm+$(wt23wuhLY7*DUP`z5dmnu*3<Gbko<3_m_(s#F;GWPS-&m2}2WRUUP&MCn<r(B}i8*&iMhH^Mize3D+?YQ#Y(zgRH9ZNEqwZG^<-Pbw?R~B!p3hHPaHLhZXxc0Q)!sNKS7qVTi0HM0V8|8RkVV{gnx2IgUgt?vw%CDHA|U$y~w^Q5uM7l3E$|TjWQ)>C&(=5VkUqOyCkWW{lHxdm58Bh%?n{iF=|9Cw`emU)gLHk|UGo+?!@0EpMelhNXTw&oV4gHF5nqBn(biPb?FyI0qikS~DPFaKfg^*w+j@yVW$siqmlc35)jdR4Z-(1l+NRgy9KW_=MLqP1fA9f;dwx;bwOoTH@q=vv7E(S-$DEtSvOQ>sL<J5~Hfk6{hwXLL01ZMB~nlF)I5wWU7>#<3PgDg!P0>!<!EFrXv>Y&4=yH4_<`Tt+10tbGBiHHe`i%0NJn?qnD5}tS6Rilwn927PUkURt7@WULs*=!lITqg@loC>8{W=UEmT93w%LS510LZl}oVM{J&#MOg`f1<B%fol26BG1CH3&TT$~9@m>&Zy{;Vn`RSF$t!;YJiQl=`{3x>el24cL1D7xa4Tz`ai7=C4M%a@K`-`yXab$+tu%8aFpH5E-kuY$_Vo+-vZchW<o_4XF4JYjbPTJRz<LzzOu?SeVrX!ghY&Z=JaNZgch9`Wyiw&z=L91IQb>kAAojOJHoZ6OUQyxj4jwi#Ze>(a&B*KymOI1}8Vdjaj*{!Vhz2c2pwCs(T>`yxkbIa2?S7p0Rp)rucZfFm~dK|5~BVou{RR&_}j#>gxOR##0UR=TuG$5XuH^Sa>&3+?nK*GQ`ot{MXw&9!~z)4C5Bn(U#Wf*0+v`+&QeY$AwO}D#2s!z9)NW<sa%e%`{OHA$M^&O5*nfX`e2&;b?F5h(QMk}m%R*?yn2(zryp^n3yZaPoZD2~@C+7d_@mavZG47A~ta=_kv9f^v!VNWPvPbd<GCwzQ_4SSIQdy$YZJmIJW8}=dr_97u+KXiMI;u40iT_J32weev;dK|$>7?N<1o?J|_;bc+3*{w(zdUmUh1W&TzL_1KgdEv`8+}Z=UwMS2aU*T$r1}!6txs}Q&YA>B@C&icVB5#Zc#F?#yQ29*OQQ%&C$?D>HS|T<iL%35VR<TW(eGZ{<iYet1;iP@jg$3i|X?X2f4{9%6v-j@Z<3R=_3{E&`KHhYYwgeLPgS9pvwFIn|K*FGeMQbf|u?=UWfbLi%OSv+9J0@Clc`NQrN#{xx+K@8*Yu`CS<S+4dnYDK4F3a$mf@GmhV45PE&pH{8>iW^B`%Q$%I&n@itkA>6Ej}E&!iIC;0q0)oNYAx4oGc1Tc<BFNy##FZGHNU8VL(01>ei4jC}AB5+NO%I8X6E!trXZ2e`I17304np*~ypT%L6svhX`@z!%hQpk4w1sBC#GN)@5KyuVS2$+?y(^TV4D(Mg4@RhmkNWVU%H%;Zjamyy+%=jNM+4-CjCk`UInwu+hscyRhpPwl_cXQyb21g`3?f+7cV~pic)Imq5a>g!LqNA8H9$Es^y(mvGz60h-Gj#F=Vkc+YkR;q~>N5*~Xt(qlGXnzz<|-=gf3m4<tgVZyhE?OFl}gA!)7mq%?l9T#wRtDamui82hUC6F+*mKb}Qt0f?|S3_*s_EwR?Y>7v`5u0U^&Y}#%%5cqZY&fMH@TSv|tn(OKgN>~%ykNs!w}AWUbmWikY`6gsl<?5Y{HiK|dmq9+QQOz-FI$35Kd4-QJ7oZO${=B2!lEr<c)S4ZVOV?k39bzHt(Kv=&dfXbVu{hiP3}4JbkBqj7c!a;kf)TNz8xW~OioeQ!{SZ1pT-Q9=lm4uVP1zp(bt{{L(qVDY9*a;ke)1kssJ~h0Pd7AAYt&GGVvV?aMvy9zUH7Xt_*KoJ6Q9qCB&I(GohC1j!FA0)46MUKbmE6=wWwTLW)aBb!*B@C~v~PQzjG%Llf4Mo)ifq;ZjUkyy<3l<KJ`uw-Utd={$wT`KDt(^H$yJ$F1&Lq6%=wBB(u#gkcHm$@s-w!U-J*Y2Fd=?lkXbGGgA&+%)NcW?cr-UL>Y>-@Y9sPulOFGDWZqo}kdfJ8~Ky2t8cnHFLTQD6iv7lwl+cP59tiE@2275Kpbd6V{XCNEn!K^^IJ@=gq#_t{Z(OJUe1=i6MOQgIV^Q&OMv&zVSrr_L3s-UI-J;bVjBnkT5J^J;~nAB@96W;;EGa8Aig;GF)(yOZaNQkiUJ?IezAuaEQ%2Vdh<XBdk_SFt6ED9|!X=MxE;;6K2&`M@;E5VbMz#*qk5M=h1Y<$YKa9_l1fwjD%qc>&a7Ja|uJxfOu*T+l%A}8Aig;GQ8n7mvAQ)G>W^GiaXPv)>=;E+4hb_MvxI^pF<DzR}hwNI*G7{ea)PnI@y*$!mxz(B>1i>!fI$hJhf6F!$=sE@c#j3_cN;'
+
+
+# ---- embedded conservative KNN market residual ----
+import base64 as _res_b64
+import math as _res_math
+import struct as _res_struct
+import zlib as _res_zlib
+
+_RES_ALLOWED_DAYS = (16, 27)
+_RES_K = 5
+_RES_BETA = 1.0
+_RES_THRESHOLD = 0.0
+_RES_PRODUCTS = ("WHEAT", "CARROT", "TOMATO", "STRAWBERRY", "MELON", "EGG", "MILK", "WOOL", "FERTILIZER")
+_RES_CROPS = ("WHEAT", "CARROT", "TOMATO", "STRAWBERRY", "MELON")
+_RES_ANIMALS = ("GOOSE", "COW", "SHEEP")
+_RES_SHOPS = ("BAKERY", "BRUNCH_SPOT", "FARMERS_MARKET", "ICE_CREAM_SHOP", "PET_CAFE", "PIZZA_SHOP", "SMOOTHIE_SHOP", "YARN_STORE")
+_RES_BASE_PRICE = {"WHEAT":25.0,"CARROT":35.0,"TOMATO":60.0,"STRAWBERRY":120.0,"MELON":250.0,"EGG":50.0,"MILK":160.0,"WOOL":200.0,"FERTILIZER":100.0}
+
+def _res_get(obj, key, default=None):
+    return obj.get(key, default) if isinstance(obj, dict) else getattr(obj, key, default)
+
+def _res_num(value, default=0.0):
+    try: return float(value)
+    except (TypeError, ValueError): return default
+
+def _res_seat(obs):
+    return max(0, min(1, int(_res_num(_res_get(obs, "player", 0)))))
+
+def _res_counts(farm):
+    keys = ("EMPTY", "LOCKED", "WEED", "COOP", "PASTURE") + _RES_CROPS + _RES_ANIMALS
+    counts = dict.fromkeys(keys, 0)
+    for row in list(_res_get(farm, "tiles", []) or []):
+        for tile in list(row or []):
+            if tile is None: counts["EMPTY"] += 1
+            elif tile == "LOCKED": counts["LOCKED"] += 1
+            elif isinstance(tile, dict):
+                kind = str(tile.get("kind", ""))
+                if kind == "PLANT" and str(tile.get("crop", "")) in counts:
+                    counts[str(tile.get("crop"))] += 1
+                elif kind in counts: counts[kind] += 1
+                animal = str(tile.get("animal", ""))
+                if animal in counts: counts[animal] += 1
+    return counts
+
+def _res_farm_features(farm):
+    counts = _res_counts(farm)
+    hands = list(_res_get(farm, "hands", []) or [])
+    farmer = list(_res_get(farm, "farmer", [4,4]) or [4,4])
+    positions = [farmer] + hands
+    xs = [_res_num(p[0]) for p in positions if len(p) >= 2]
+    ys = [_res_num(p[1]) for p in positions if len(p) >= 2]
+    out = [_res_math.log1p(max(0.0,_res_num(_res_get(farm,"money",0))))/12.0,
+           len(hands)/16.0, _res_num(_res_get(farm,"hires_today",0))/16.0,
+           len(list(_res_get(farm,"unlocked_quadrants",[]) or []))/4.0,
+           _res_num(farmer[0] if len(farmer)>0 else 4)/9.0,
+           _res_num(farmer[1] if len(farmer)>1 else 4)/9.0,
+           (sum(xs)/max(1,len(xs)))/9.0, (sum(ys)/max(1,len(ys)))/9.0]
+    for key in ("EMPTY","LOCKED","WEED","COOP","PASTURE") + _RES_CROPS + _RES_ANIMALS:
+        out.append(counts[key]/100.0)
+    return out
+
+def _res_signature(obs):
+    player = _res_seat(obs)
+    farms = list(_res_get(obs,"farms",[]) or [])
+    farms += [{}] * max(0, 2-len(farms))
+    step = max(0.0,_res_num(_res_get(obs,"step",0)))
+    hour = max(0.0,_res_num(_res_get(obs,"hour",step%24)))
+    out = [step/719.0, _res_num(_res_get(obs,"day",step//24))/29.0, hour/23.0,
+           _res_math.sin(2*_res_math.pi*hour/24), _res_math.cos(2*_res_math.pi*hour/24)]
+    out.extend(_res_farm_features(farms[player])); out.extend(_res_farm_features(farms[1-player]))
+    private = _res_get(obs,"private",{}) or {}; shed = _res_get(private,"shed",{}) or {}; seeds = _res_get(private,"seeds",{}) or {}
+    for item in _RES_PRODUCTS: out.append(_res_math.log1p(max(0.0,_res_num(_res_get(shed,item,0))))/5.0)
+    for crop in _RES_CROPS: out.append(_res_math.log1p(max(0.0,_res_num(_res_get(seeds,crop,0))))/4.0)
+    market = _res_get(obs,"market",{}) or {}; inventory = _res_get(market,"inventory",{}) or {}; prices = _res_get(market,"prices",{}) or {}
+    for item in _RES_PRODUCTS:
+        out.append(_res_math.tanh((_res_num(_res_get(inventory,item,10000))-10000.0)/100.0))
+        out.append(_res_math.log1p(max(0.0,_res_num(_res_get(prices,item,0))))/_res_math.log1p(_RES_BASE_PRICE[item]*3.0))
+    active = list(_res_get(_res_get(obs,"town",{}) or {},"unlocked_shops",[]) or [])
+    for shop in _RES_SHOPS: out.append(min(4,active.count(shop))/4.0)
+    return out
+
+def _res_decode():
+    raw = _res_zlib.decompress(_res_b64.b85decode(_RES_DATA))
+    n, dim = _res_struct.unpack_from("<IH", raw, 0); offset = 6; pools = {}
+    record = _res_struct.Struct("<BBf" + "f"*dim)
+    for _ in range(n):
+        values = record.unpack_from(raw, offset); offset += record.size
+        pools.setdefault((values[0],values[1]),[]).append((values[3:],values[2]))
+    return pools
+
+_RES_POOLS = _res_decode(); _RES_STATE = {0:{"used":False},1:{"used":False}}
+
+def _res_score(features, day, mode):
+    pool = _RES_POOLS.get((day,mode),())
+    if len(pool) < _RES_K: return float("-inf")
+    dim = len(features); means = [sum(row[0][i] for row in pool)/len(pool) for i in range(dim)]
+    scales = []
+    for i in range(dim):
+        variance = sum((row[0][i]-means[i])**2 for row in pool)/len(pool)
+        scales.append(_res_math.sqrt(variance) if variance >= 1e-12 else 1.0)
+    ranked = sorted(pool, key=lambda row: sum(((row[0][i]-features[i])/scales[i])**2 for i in range(dim))/dim)[:_RES_K]
+    values = [row[1] for row in ranked]; mean = sum(values)/len(values)
+    variance = sum((v-mean)**2 for v in values)/(len(values)-1)
+    return mean - _RES_BETA*_res_math.sqrt(variance/len(values))
+
+def _res_apply(action, obs, mode):
+    import copy as _res_copy
+    if mode == 0: return _res_copy.deepcopy(action)
+    out = _res_copy.deepcopy(action); orders = [list(x) for x in out.get("market",[]) or []]
+    non = [x for x in orders if not x or x[0] != "SELL"]; sells = [x for x in orders if x and x[0] == "SELL"]
+    shed = dict(_res_get(_res_get(obs,"private",{}) or {},"shed",{}) or {})
+    if mode == 1: rewritten = non
+    elif mode == 2: rewritten = non + [["SELL",str(x[1]),max(1,int(x[2])//2)] for x in sells if len(x)>=3 and int(x[2] or 0)>1]
+    elif mode == 3: rewritten = non + [["SELL",str(x[1]),max(0,int(shed.get(str(x[1]),0) or 0))] for x in sells if len(x)>=3 and int(shed.get(str(x[1]),0) or 0)>0]
+    else:
+        rewritten = list(non)
+        for item in _RES_PRODUCTS:
+            amount = max(0,int(shed.get(item,0) or 0))
+            if amount and len(rewritten)<10: rewritten.append(["SELL",item,amount])
+    out["market"] = rewritten[:10]; return out
+
+def agent(obs, config=None):
+    step = max(0,int(_res_get(obs,"step",0) or 0)); player = _res_seat(obs)
+    if step == 0: _RES_STATE[player] = {"used":False}
+    baseline = _baseline_agent(obs, config); mode = 0
+    if step%24 == 0 and step//24 in _RES_ALLOWED_DAYS and not _RES_STATE[player]["used"]:
+        features = _res_signature(obs); scored = [(_res_score(features,step//24,m),m) for m in range(1,5)]
+        score, proposal = max(scored)
+        if score > _RES_THRESHOLD: mode = proposal; _RES_STATE[player]["used"] = True
+    action = _res_apply(baseline,obs,mode)
+    try:
+        _META_STATE[player]["prev_action"] = copy.deepcopy(action)
+        _ACTION_CACHE[player]["action"] = copy.deepcopy(action)
+    except Exception: pass
+    return action
