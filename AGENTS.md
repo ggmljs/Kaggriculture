@@ -521,7 +521,7 @@ at commit `ae0e80bb4a18a40c60ca514f0ce9d8f2a4c338af`.
   `78ecfb3e3938117bdad1109eccc0a3f47f5666178c22889b2126b7cb2decc289`;
   its initial dynamic score was `600.0`.
 
-### V17: safe residual KNN policy — 2026-09-09 (current)
+### V17: safe residual KNN policy — 2026-09-09
 
 - Kept V16 as the default controller and added a deterministic, at-most-once,
   SELL-only residual restricted to day 16 or day 27. The residual uses `k=5`,
@@ -540,3 +540,21 @@ at commit `ae0e80bb4a18a40c60ca514f0ce9d8f2a4c338af`.
   archive SHA-256 is
   `c285227a85f0a2f91468e924720b72bc51107222031089af25d30aaea820977a`.
   Its initial dynamic score was `600.0`.
+### V18: online-safe residual KNN policy — 2026-09-10 (current)
+
+- Used V17 public outcomes to identify a reproducible day-27 regression caused
+  by rebuilding the sell list and evicting a baseline FERTILIZER order. The
+  safe liquidation shield now preserves and tops up baseline sales, and uses
+  only free order slots for additional high-value inventory.
+- Collected a new 24-seed, both-seat counterfactual round under the corrected
+  action semantics, excluded incompatible legacy liquidation labels, and
+  retrained the gate on 480 compatible rows. Leave-one-seed-out selection plus
+  the public-action-tape safety constraint retained `k=5`, `beta=0.5`, and
+  threshold `150`; repeated initial BAKERY shops fail closed to V16.
+- Final `main.py` SHA-256 is
+  `71246b225b6ab2cd7ce1bd9ae0f26a0a62972226fa4addb7dc4b7130a250b94b`.
+  A fresh 60-seed, 120-game both-seat panel had mean margin `+58.958` and paired
+  bootstrap 95% interval `[+19.258, +103.142]`. Sixteen public-opponent tape
+  comparisons had zero regression. These are local diagnostics, not a live
+  leaderboard guarantee.
+- Git and Kaggle delivery identifiers are appended after remote completion.

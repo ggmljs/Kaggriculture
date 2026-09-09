@@ -3,105 +3,79 @@
 
   [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
   [![Tests](https://img.shields.io/badge/tests-80%20passing-2ea44f?logo=pytest&logoColor=white)](#verified-current-strategy)
-  [![Submission](https://img.shields.io/badge/V17-COMPLETE-2ea44f?logo=kaggle&logoColor=white)](#submission)
-  [![Policy](https://img.shields.io/badge/policy-safe%20residual%20KNN-7B61FF)](#strategy)
+  [![Submission](https://img.shields.io/badge/V18-pending-f0ad4e?logo=kaggle&logoColor=white)](#submission)
+  [![Policy](https://img.shields.io/badge/policy-online--safe%20residual%20KNN-7B61FF)](#strategy)
 
   **A deterministic public-state farm agent for Kaggle's 720-state economic simulation.**
 </div>
 
 ## Overview
 
-This repository contains the self-contained V17 agent for the
+This repository contains the self-contained V18 candidate for the
 [Kaggriculture competition](https://www.kaggle.com/competitions/kaggriculture).
-V17 keeps V16 as the baseline and adds a deterministic, once-per-episode,
-SELL-only residual learned from counterfactual round-2/3 data.
+V18 keeps V16 as the baseline, uses an at-most-once SELL-only residual on day
+16 or 27, and retrains its gate on 480 semantically compatible counterfactual
+records including a new safe round 4.
 
 ```text
 V16 baseline action
-  ├─ day not in {16, 27}       → return unchanged
-  ├─ residual already used     → return unchanged
-  ├─ estimated advantage ≤ 0   → return unchanged
-  └─ estimated advantage > 0   → apply one bounded SELL-only intervention
+  ├─ malformed/repeated-Bakery public regime → return unchanged
+  ├─ day not in {16, 27} or already used     → return unchanged
+  ├─ KNN lower-confidence score ≤ 150        → return unchanged
+  └─ score > 150                             → one shielded SELL intervention
 ```
 
 The Kaggle entrypoint is [`main.py`](main.py). It has no runtime dependency on
-training files, PyTorch, the local training package, absolute paths, or network
-access.
+training files, PyTorch, local packages, absolute paths, or network access.
 
 ## Strategy
 
-- V16 remains the default controller on every turn.
-- The residual uses `k=5`, distance weighting `beta=1.0`, and a strictly
-  positive estimated-advantage threshold over 384 embedded counterfactual
-  records.
-- At most one intervention can occur, only on day 16 or 27, and only market
-  `SELL` orders may change.
-- Farmer actions, hand actions, and purchase orders always remain controlled by
-  the baseline.
-- Baseline metadata and action caches are synchronized after an intervention.
+- The gate uses `k=5`, uncertainty penalty `beta=0.5`, and threshold `150`.
+- Farmer, hand, and purchase actions always remain baseline-controlled.
+- `LIQUIDATE_SHED` preserves baseline sell orders, tops up their quantities,
+  and spends only free order slots on highest-current-value omitted inventory.
+- A repeated initial `BAKERY/BAKERY` public shop prefix fails closed to V16.
+- Baseline metadata and action caches remain synchronized after intervention.
 
 ## Verified current strategy
 
-The V17 `main.py` SHA-256 is
-`4b9745ebc26f51b776598ad4326d8ce9b8fdb1c9ea789724db98fb91fd404042`.
-The repository has 80 passing tests. Starter and random smoke matches each
-reached 720 states with `DONE/DONE` and a win.
+The final `main.py` SHA-256 is
+`71246b225b6ab2cd7ce1bd9ae0f26a0a62972226fa4addb7dc4b7130a250b94b`.
 
-The independent round-4 frozen confirmation completed 120 games over 60 seeds
-and both seats with mean paired margin `+152.892` and paired confidence interval
-`[+31.62, +324.34]` versus V16. Combining both frozen panels gives 200 games
-over 100 seeds, mean paired margin `+112.405`, confidence interval
-`[+34.99, +218.42]`, and 36 positive, 50 tied, and 14 negative seeds.
+The independent 60-seed, both-seat panel completed 120/120 games at
+`DONE/DONE`, with mean margin `+58.958` versus V16 and paired bootstrap 95%
+interval `[+19.258, +103.142]`. Thirteen seeds were positive, 42 tied, and five
+negative.
 
-A source-string execution smoke completed 8/8 games without stderr. Regression
-checks won 8/8 games against `main_hybrid.py` and 8/8 against `rule_agent.py`.
-These are local frozen comparisons, not a guarantee against hidden or changing
-opponents. Exact scope and claim limits are in
-[`docs/v17-strategy.md`](docs/v17-strategy.md).
-
-The repository-local environment still reports three missing optional
-`kaggle-environments` transitive packages (`gymnax`, `litellm`, and
-`transformers`). Kaggriculture 1.32.7 imports successfully and all applicable
-checks above ran.
+Sixteen both-seat comparisons against eight latest V17 public opponent action
+tapes were clean and had zero regression versus V16. A separate 24-game final
+league had positive mean margin against V16, frozen V10, and Wheat. These are
+local frozen and open-loop diagnostics, not a live-score guarantee. Exact
+scope is documented in [`docs/v18-strategy.md`](docs/v18-strategy.md).
 
 ## Quick start
-
-Prerequisites: Git and the CPython version recorded in [`.python-version`](.python-version).
 
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.lock
 python -m pytest -q
-```
-
-Run local matches and build the minimal archive:
-
-```bash
 python scripts/run_local_match.py --opponent starter --seed 20260805
-python scripts/run_local_match.py --opponent random --seed 20260805
 python scripts/package_submission.py
-tar -tzf dist/submission.tar.gz
 ```
 
 ## Submission
 
-V17 submission `56126261`, message `v17 safe residual knn 1277bdb`, reached
-`COMPLETE`. The uploaded `main.py` maps to public Git commit
-[`1277bdb`](https://github.com/ggmljs/Kaggriculture/commit/1277bdba4440edffdb062519c7ecd66a9a937243),
-which was pushed to `origin/feature/safe-residual-knn` before the Kaggle upload.
+The V18 GitHub commit is pushed before the Kaggle upload. The submission ID,
+remote status, and dynamic score are added only after Kaggle returns them.
 
-The reviewed archive is 135,892 bytes with SHA-256
-`c285227a85f0a2f91468e924720b72bc51107222031089af25d30aaea820977a`.
-Kaggle recorded it at `2026-09-09T15:25:15.680Z`; validation completed with an
-initial dynamic public score of **600.0**. A new simulation submission begins
-its own rating trajectory, so this is a delivery snapshot rather than a final
-strength estimate.
+The deterministic reviewed archive is 139,406 bytes with SHA-256
+`c0b00b1ed1f5e430e183bf8ae4beb7aa71e2bd49b841372233a47450a66eddf9`.
 
 The package contains only:
 
 ```text
-submission-residual-knn.tar.gz
+submission.tar.gz
 ├── main.py
 ├── LICENSE-APACHE-2.0.txt
 └── THIRD_PARTY_NOTICES.txt
@@ -111,23 +85,14 @@ submission-residual-knn.tar.gz
 
 ```text
 .
-├── main.py                       # self-contained V17 Kaggle agent
-├── scripts/                      # local evaluation and packaging utilities
-├── docs/v17-strategy.md          # current strategy and evidence boundary
-├── tests/                        # deterministic unit and smoke tests
-├── THIRD_PARTY_NOTICES.md        # route provenance and modifications
+├── main.py                       # self-contained V18 Kaggle agent
+├── scripts/                      # evaluation and packaging utilities
+├── docs/v18-strategy.md          # current strategy and evidence boundary
+├── tests/                        # deterministic tests and smoke checks
+├── THIRD_PARTY_NOTICES.md        # provenance and modifications
 ├── AGENTS.md                     # chronological strategy history and rules
-└── requirements*.txt             # portable dependency inputs and lockfile
+└── requirements*.txt             # dependency inputs and lockfile
 ```
-
-## Development gates
-
-1. Run `python -m pip check` and `python -m pytest -q`.
-2. Complete 720-state starter and random matches.
-3. Evaluate both seats on frozen seeds and report regressions as well as means.
-4. Rebuild the archive and verify its contents, import, and hash.
-5. Distinguish local frozen evidence, remote validation, and dynamic scores.
-6. Stage only explicit paths; never commit credentials or generated training data.
 
 Repository-specific contribution and delivery rules live in
 [`AGENTS.md`](AGENTS.md).
