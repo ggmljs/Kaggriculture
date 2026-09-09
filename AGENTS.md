@@ -498,7 +498,7 @@ at commit `ae0e80bb4a18a40c60ca514f0ce9d8f2a4c338af`.
 - Preserved V10's official-default actions while accepting only complete, public, valid custom market curves for SELL-order ranking; malformed or absent curves fail closed to V10 defaults.
 - Added an open-loop, both-seat replay regression gate for future candidate screening. It is a regression screen, not a live-score forecast.
 
-### V16: leader-aware conservative market queue — 2026-09-09 (current)
+### V16: leader-aware conservative market queue — 2026-09-09
 
 - Rejected the initial interpretation of unsupported cross-product
   `BUY_PRODUCT` requests after interpreter inspection and frame-by-frame state
@@ -520,3 +520,23 @@ at commit `ae0e80bb4a18a40c60ca514f0ce9d8f2a4c338af`.
   125,637-byte archive SHA-256 is
   `78ecfb3e3938117bdad1109eccc0a3f47f5666178c22889b2126b7cb2decc289`;
   its initial dynamic score was `600.0`.
+
+### V17: safe residual KNN policy — 2026-09-09 (current)
+
+- Kept V16 as the default controller and added a deterministic, at-most-once,
+  SELL-only residual restricted to day 16 or day 27. The residual uses `k=5`,
+  `beta=1.0`, a positive advantage threshold, and 384 embedded round-2/3
+  counterfactual records; it does not change farmer, hand, or purchase actions.
+- The final self-contained `main.py` SHA-256 is
+  `4b9745ebc26f51b776598ad4326d8ce9b8fdb1c9ea789724db98fb91fd404042`.
+  Eighty tests passed; starter and random smokes reached 720 states and
+  `DONE/DONE`. The combined frozen comparison covered 100 seeds and 200 games,
+  with mean paired margin `+112.405` and confidence interval
+  `[+34.99, +218.42]` versus V16. This is local evidence, not a leaderboard
+  guarantee.
+- Code commit `1277bdba4440edffdb062519c7ecd66a9a937243` was pushed to
+  `origin/feature/safe-residual-knn` before upload. Kaggle submission `56126261`,
+  message `v17 safe residual knn 1277bdb`, reached `COMPLETE`; the 135,892-byte
+  archive SHA-256 is
+  `c285227a85f0a2f91468e924720b72bc51107222031089af25d30aaea820977a`.
+  Its initial dynamic score was `600.0`.

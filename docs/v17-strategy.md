@@ -43,5 +43,8 @@ opponents.
 The reviewed 135,892-byte archive has SHA-256
 `c285227a85f0a2f91468e924720b72bc51107222031089af25d30aaea820977a`
 and contains only `main.py`, `LICENSE-APACHE-2.0.txt`, and
-`THIRD_PARTY_NOTICES.txt`. Git commit and Kaggle submission identifiers are
-recorded after each remote operation completes.
+`THIRD_PARTY_NOTICES.txt`. Code commit
+`1277bdba4440edffdb062519c7ecd66a9a937243` was pushed to
+`origin/feature/safe-residual-knn` before the Kaggle upload. Submission
+`56126261`, message `v17 safe residual knn 1277bdb`, reached `COMPLETE`; Kaggle
+recorded it at `2026-09-09T15:25:15.680Z` with initial dynamic score `600.0`.
