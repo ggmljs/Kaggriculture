@@ -557,4 +557,9 @@ at commit `ae0e80bb4a18a40c60ca514f0ce9d8f2a4c338af`.
   bootstrap 95% interval `[+19.258, +103.142]`. Sixteen public-opponent tape
   comparisons had zero regression. These are local diagnostics, not a live
   leaderboard guarantee.
-- Git and Kaggle delivery identifiers are appended after remote completion.
+- Code commit `467d26d881c6d0232c46152f5c09d3ad2d24fc56` was pushed to
+  `origin/feature/v18-online-safe-residual` before upload. Kaggle submission
+  `56128972`, message `v18 online-safe residual knn 467d26d`, reached
+  `COMPLETE`; the 139,406-byte archive SHA-256 is
+  `c0b00b1ed1f5e430e183bf8ae4beb7aa71e2bd49b841372233a47450a66eddf9`.
+  Its initial dynamic score was `600.0`.

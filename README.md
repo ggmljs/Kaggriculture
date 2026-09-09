@@ -3,7 +3,7 @@
 
   [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
   [![Tests](https://img.shields.io/badge/tests-80%20passing-2ea44f?logo=pytest&logoColor=white)](#verified-current-strategy)
-  [![Submission](https://img.shields.io/badge/V18-pending-f0ad4e?logo=kaggle&logoColor=white)](#submission)
+  [![Submission](https://img.shields.io/badge/V18-COMPLETE-2ea44f?logo=kaggle&logoColor=white)](#submission)
   [![Policy](https://img.shields.io/badge/policy-online--safe%20residual%20KNN-7B61FF)](#strategy)
 
   **A deterministic public-state farm agent for Kaggle's 720-state economic simulation.**
@@ -66,8 +66,12 @@ python scripts/package_submission.py
 
 ## Submission
 
-The V18 GitHub commit is pushed before the Kaggle upload. The submission ID,
-remote status, and dynamic score are added only after Kaggle returns them.
+V18 submission `56128972`, message `v18 online-safe residual knn 467d26d`,
+reached `COMPLETE`. The uploaded `main.py` maps to public Git commit
+[`467d26d`](https://github.com/ggmljs/Kaggriculture/commit/467d26d881c6d0232c46152f5c09d3ad2d24fc56),
+which was pushed to `origin/feature/v18-online-safe-residual` before upload.
+Kaggle recorded it at `2026-09-09T18:17:54.090Z` with initial dynamic score
+`600.0`; this is a starting snapshot, not a final strength estimate.
 
 The deterministic reviewed archive is 139,406 bytes with SHA-256
 `c0b00b1ed1f5e430e183bf8ae4beb7aa71e2bd49b841372233a47450a66eddf9`.

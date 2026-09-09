@@ -56,6 +56,9 @@ changing opponents.
 The deterministic 139,406-byte archive has SHA-256
 `c0b00b1ed1f5e430e183bf8ae4beb7aa71e2bd49b841372233a47450a66eddf9`
 and contains only `main.py`, `LICENSE-APACHE-2.0.txt`, and
-`THIRD_PARTY_NOTICES.txt`. Git commit, Kaggle submission ID, validation status,
-and observed dynamic score are recorded after the corresponding remote
-operations complete.
+`THIRD_PARTY_NOTICES.txt`. Code commit
+`467d26d881c6d0232c46152f5c09d3ad2d24fc56` was pushed to
+`origin/feature/v18-online-safe-residual` before upload. Kaggle submission
+`56128972`, message `v18 online-safe residual knn 467d26d`, reached `COMPLETE`.
+Kaggle recorded it at `2026-09-09T18:17:54.090Z` with initial dynamic score
+`600.0`.
