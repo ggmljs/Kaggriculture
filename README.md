@@ -3,7 +3,7 @@
 
   [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
   [![Tests](https://img.shields.io/badge/tests-81%20passing-2ea44f?logo=pytest&logoColor=white)](#verified-current-strategy)
-  [![Submission](https://img.shields.io/badge/V29-candidate-f0ad4e?logo=kaggle&logoColor=white)](#submission)
+  [![Submission](https://img.shields.io/badge/V29-COMPLETE-2ea44f?logo=kaggle&logoColor=white)](#submission)
   [![Policy](https://img.shields.io/badge/policy-official--strong%20default-7B61FF)](#strategy)
 
   **A deterministic public-state farm agent for Kaggle's 720-state economic simulation.**
@@ -67,9 +67,15 @@ python scripts/package_submission.py
 
 ## Submission
 
-V29 has passed its strategy gate and is being delivered GitHub-first. The
-commit, archive hash, Kaggle submission ID, validation status, and first score
-snapshot will be recorded here immediately after remote delivery.
+V29 submission `56137699`, message `v29 official-strong default d95fc6b`,
+reached `COMPLETE`. The uploaded `main.py` maps to public Git commit
+[`d95fc6b`](https://github.com/ggmljs/Kaggriculture/commit/d95fc6b590a466cf1622326872681f9053e25772),
+which was pushed to `origin/feature/v29-official-strong-default` before upload.
+Kaggle recorded it at `2026-09-10T05:10:42.403Z` with initial dynamic score
+`600.0`; this is a starting snapshot, not a strength estimate.
+
+The deterministic reviewed archive is 181,451 bytes with SHA-256
+`b9caf78699c65cd4c4e69bd14d6c8ae09e7285eb1c0af8ec36e71dd020b4843c`.
 
 The package contains only:
 

@@ -581,3 +581,12 @@ at commit `ae0e80bb4a18a40c60ca514f0ce9d8f2a4c338af`.
   margin `+18,323.292`; all games reached 720 states and `DONE/DONE` with empty
   stderr. See `docs/v29-strategy.md` and
   `docs/evidence/v29-official-strong-gate.json` for scope and claim limits.
+- Frozen `main.py` SHA-256 is
+  `68c81d9efbd27807340ad575a4e92d12aff151561185be22823ebd5ebf1597eb`.
+  Eighty-one tests passed; starter and random smokes reached 720 states and
+  `DONE/DONE`. The reproducible 181,451-byte archive SHA-256 is
+  `b9caf78699c65cd4c4e69bd14d6c8ae09e7285eb1c0af8ec36e71dd020b4843c`.
+- Code commit `d95fc6b590a466cf1622326872681f9053e25772` was pushed to
+  `origin/feature/v29-official-strong-default` before upload. Kaggle submission
+  `56137699`, message `v29 official-strong default d95fc6b`, reached
+  `COMPLETE`; its initial dynamic score was `600.0`.
