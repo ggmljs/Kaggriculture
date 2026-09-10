@@ -1,0 +1,46 @@
+{
+  "candidate": {
+    "version": "v29",
+    "sha256": "68c81d9efbd27807340ad575a4e92d12aff151561185be22823ebd5ebf1597eb",
+    "default_route": "cooked_ep107301740"
+  },
+  "official_replay_gate": {
+    "snapshot_date": "2026-09-10",
+    "games": 80,
+    "both_seats": true,
+    "states_per_game": 720,
+    "all_done": true,
+    "all_stderr_empty": true,
+    "v18": {"wins": 17, "losses": 63, "mean_margin": -12520.5625},
+    "v29": {"wins": 35, "losses": 45, "mean_margin": -1189.05},
+    "paired_delta": {
+      "key": ["recorded_team", "episode", "seat"],
+      "improved": 60,
+      "regressed": 20,
+      "mean": 11331.5125,
+      "median": 21415.5,
+      "worst": -78282.0,
+      "best": 69399.0
+    },
+    "known_weakness": {
+      "opponent": "Otter Vibe",
+      "wins": 0,
+      "games": 8,
+      "mean_margin": -39784.625
+    }
+  },
+  "fresh_v18_closed_loop": {
+    "seeds": 12,
+    "games": 24,
+    "both_seats": true,
+    "wins": 24,
+    "losses": 0,
+    "mean_margin": 18323.291666666668,
+    "batch_mean_margins": [17911.0, 18069.125, 18989.75],
+    "states_per_game": 720,
+    "all_done": true,
+    "all_stderr_empty": true,
+    "opponent_sha256": "71246b225b6ab2cd7ce1bd9ae0f26a0a62972226fa4addb7dc4b7130a250b94b"
+  },
+  "claim_limit": "Official replay rows are fixed-action tape evaluations; the fresh V18 league is closed-loop but does not represent the live leaderboard distribution."
+}

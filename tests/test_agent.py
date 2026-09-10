@@ -304,6 +304,22 @@ def test_routes_are_frozen_with_route_specific_sale_schedules():
     )
 
 
+def test_v29_official_strong_routes_are_frozen():
+    expected = {
+        "cooked_ep107314414": "e06624bff35e91cd057e5b26a33b651aea6872cd8f91ffc8e959a23625fc6f78",
+        "cooked_ep107310411": "f6e5bae58b27cfd6b1326d971576157cfdfdbe45a83d4ff4ec70ae2d4c9fdd94",
+        "cooked_ep107301740": "be98094fd0b69d1e7fe9b5c9a52918edee40d05225b7ed0f310973f849fd402f",
+        "cooked_ep107294852": "b0a84f03ee41db28912f550187110426292ad011a9e4460392451825cac42487",
+    }
+    for name, expected_hash in expected.items():
+        route = submission._V7_CURRENT_ROUTES[name]
+        assert len(route) == 719
+        actual_hash = hashlib.sha256(
+            json.dumps(route, separators=(",", ":")).encode()
+        ).hexdigest()
+        assert actual_hash == expected_hash
+
+
 def test_v10_recovery_routes_are_frozen_at_the_safe_divergence():
     expected = {
         "low": (
@@ -329,9 +345,15 @@ def test_v10_recovery_routes_are_frozen_at_the_safe_divergence():
         ).hexdigest() == sales_hash
 
     v9_routes = [
-        *submission._V7_CURRENT_ROUTES.values(),
-        *submission._V7_LEGACY_ROUTES.values(),
-    ]
+        submission._V7_CURRENT_ROUTES[name]
+        for name in (
+            "10c4s_3q",
+            "8c6s_3q",
+            "6c8s_3q",
+            "6c12s_4q_first_yarn",
+            "6c12s_4q_second_yarn",
+        )
+    ] + list(submission._V7_LEGACY_ROUTES.values())
     assert all(
         submission._V5_LOW_ACTIONS[:72] == route[:72]
         for route in v9_routes
@@ -497,18 +519,17 @@ def test_legacy_route_state_is_isolated_by_seat():
     )
 
 
-def test_opening_builds_the_shared_high_throughput_supply_chain():
+def test_v29_opening_uses_the_frozen_official_strong_route():
     reset_controller()
     action = agent(make_observation())
 
-    assert action["farmer"] == ["BUILD_PASTURE"]
+    assert action["farmer"] == ["PASS"]
     assert action["hands"] == []
-    assert action["market"].count(["HIRE"]) == 5
-    assert ["BUY_ANIMAL", "SHEEP", 2] in action["market"]
-    assert ["BUY_ANIMAL", "COW", 2] in action["market"]
-    assert ["BUY_SEED", "MELON", 12] in action["market"]
-    assert ["BUY_SEED", "WHEAT", 7] in action["market"]
-    assert len(action["market"]) == 10
+    assert action["market"] == [
+        ["SELL", "WHEAT", 13],
+        ["BUY_PRODUCT", "WHEAT", 13],
+        ["BUY_PRODUCT", "WHEAT", 13],
+    ]
 
 
 def test_hand_actions_are_aligned_to_observed_workers():
@@ -816,14 +837,14 @@ def test_seed_clip_does_not_buy_for_an_atomic_plant_that_already_failed():
     assert ["BUY_SEED", "CARROT", 1] not in clipped["market"]
 
 
-def test_visible_weed_is_dug_then_the_delayed_build_is_retried():
+def test_visible_weed_is_dug_then_v29_route_rejoins_next_step():
     reset_controller()
     obs = make_observation(step=0)
     obs["farms"][0]["tiles"][4][4] = {"kind": "WEED"}
 
     assert agent(obs)["farmer"] == ["DIG"]
     retry = make_observation(step=1)
-    assert agent(retry)["farmer"] == ["BUILD_PASTURE"]
+    assert agent(retry)["farmer"] == ["NORTH"]
 
 
 def test_pass_on_a_visible_weed_is_replaced_by_dig():
@@ -1472,7 +1493,7 @@ def test_step_zero_reset_is_deterministic():
 def test_same_nonzero_observation_retry_is_idempotent_and_copy_safe():
     reset_controller()
     submission._META_STATE[0]["h4_active"] = True
-    obs = make_observation(step=141, shed={"WOOL": 6})
+    obs = make_observation(step=149, shed={"WOOL": 6})
 
     first = agent(deepcopy(obs))
     state_after_first = deepcopy(submission._META_STATE[0])
@@ -1488,23 +1509,28 @@ def test_same_nonzero_observation_retry_is_idempotent_and_copy_safe():
 
 def test_same_step_with_changed_game_state_is_recomputed():
     reset_controller()
-    stocked = make_observation(step=147, shed={"WOOL": 6})
-    empty = make_observation(step=147, shed={})
+    weeded = make_observation(step=17)
+    weeded["farms"][0]["tiles"][4][4] = {"kind": "WEED"}
+    clean = make_observation(step=17)
 
-    first = agent(stocked)
-    second = agent(empty)
+    first = agent(weeded)
+    second = agent(clean)
 
-    assert ["SELL", "WOOL", 6] in first["market"]
-    assert ["SELL", "WOOL", 6] not in second["market"]
+    assert first["farmer"] == ["DIG"]
+    assert second["farmer"] != ["DIG"]
 
 
 def test_action_cache_is_isolated_between_player_seats():
     reset_controller()
-    first = agent(make_observation(step=147, player=0, shed={"WOOL": 6}))
-    second = agent(make_observation(step=147, player=1, shed={}))
+    weeded = make_observation(step=17, player=0)
+    weeded["farms"][0]["tiles"][4][4] = {"kind": "WEED"}
+    clean = make_observation(step=17, player=1)
 
-    assert ["SELL", "WOOL", 6] in first["market"]
-    assert ["SELL", "WOOL", 6] not in second["market"]
+    first = agent(weeded)
+    second = agent(clean)
+
+    assert first["farmer"] == ["DIG"]
+    assert second["farmer"] != ["DIG"]
 
 
 def test_alternating_seats_keep_route_schedule_and_cached_action_isolated():
@@ -1534,10 +1560,13 @@ def test_alternating_seats_keep_route_schedule_and_cached_action_isolated():
         shops=["YARN_STORE", "BAKERY", "PET_CAFE"],
     )
     agent(next_obs)
-    assert submission._ACTIONS is submission._ACTIONS_6C12S_4Q_FIRST_YARN
+    assert (
+        submission._ACTIONS
+        is submission._V7_CURRENT_ROUTES["cooked_ep107301740"]
+    )
     assert (
         submission._META_SALES
-        is submission._V7_CURRENT_SALES["6c12s_4q_first_yarn"]
+        is submission._V7_CURRENT_SALES["cooked_ep107301740"]
     )
 
 

@@ -2,27 +2,27 @@
   <img src="assets/logo.svg" width="100%" alt="Kaggriculture autonomous farming agent" />
 
   [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-  [![Tests](https://img.shields.io/badge/tests-80%20passing-2ea44f?logo=pytest&logoColor=white)](#verified-current-strategy)
-  [![Submission](https://img.shields.io/badge/V18-COMPLETE-2ea44f?logo=kaggle&logoColor=white)](#submission)
-  [![Policy](https://img.shields.io/badge/policy-online--safe%20residual%20KNN-7B61FF)](#strategy)
+  [![Tests](https://img.shields.io/badge/tests-81%20passing-2ea44f?logo=pytest&logoColor=white)](#verified-current-strategy)
+  [![Submission](https://img.shields.io/badge/V29-candidate-f0ad4e?logo=kaggle&logoColor=white)](#submission)
+  [![Policy](https://img.shields.io/badge/policy-official--strong%20default-7B61FF)](#strategy)
 
   **A deterministic public-state farm agent for Kaggle's 720-state economic simulation.**
 </div>
 
 ## Overview
 
-This repository contains the self-contained V18 candidate for the
+This repository contains the self-contained V29 candidate for the
 [Kaggriculture competition](https://www.kaggle.com/competitions/kaggriculture).
-V18 keeps V16 as the baseline, uses an at-most-once SELL-only residual on day
-16 or 27, and retrains its gate on 480 semantically compatible counterfactual
-records including a new safe round 4.
+V29 resets the default production plan to a league-selected 8-cow, 6-sheep,
+3-goose route reconstructed from consistent public leaderboard behavior while
+retaining the defensive execution and liquidation controls.
 
 ```text
-V16 baseline action
-  ├─ malformed/repeated-Bakery public regime → return unchanged
-  ├─ day not in {16, 27} or already used     → return unchanged
-  ├─ KNN lower-confidence score ≤ 150        → return unchanged
-  └─ score > 150                             → one shielded SELL intervention
+official public replay routes
+  ├─ reconstruct complete deterministic production experts
+  ├─ screen every route against top leaderboard action tapes
+  ├─ select cooked episode 107301740 as the default expert
+  └─ retain fail-closed execution and terminal liquidation controls
 ```
 
 The Kaggle entrypoint is [`main.py`](main.py). It has no runtime dependency on
@@ -30,28 +30,29 @@ training files, PyTorch, local packages, absolute paths, or network access.
 
 ## Strategy
 
-- The gate uses `k=5`, uncertainty penalty `beta=0.5`, and threshold `150`.
-- Farmer, hand, and purchase actions always remain baseline-controlled.
-- `LIQUIDATE_SHED` preserves baseline sell orders, tops up their quantities,
-  and spends only free order slots on highest-current-value omitted inventory.
-- A repeated initial `BAKERY/BAKERY` public shop prefix fails closed to V16.
-- Baseline metadata and action caches remain synchronized after intervention.
+- The default expert builds toward 8 cows, 6 sheep, and 3 geese with larger
+  wheat and strawberry production than V18's route family.
+- Route selection was frozen before the final official-replay gate was opened.
+- Public identity, episode ID, seed, and future actions are not used at runtime.
+- Existing weed recovery, purchase reconciliation, market-order safety,
+  terminal liquidation, malformed-observation protection, and retry-safe
+  action caching remain active.
 
 ## Verified current strategy
 
 The final `main.py` SHA-256 is
-`71246b225b6ab2cd7ce1bd9ae0f26a0a62972226fa4addb7dc4b7130a250b94b`.
+`68c81d9efbd27807340ad575a4e92d12aff151561185be22823ebd5ebf1597eb`.
 
-The independent 60-seed, both-seat panel completed 120/120 games at
-`DONE/DONE`, with mean margin `+58.958` versus V16 and paired bootstrap 95%
-interval `[+19.258, +103.142]`. Thirteen seeds were positive, 42 tied, and five
-negative.
+The official-replay gate covered 80 both-seat games from the 2026-09-10 top
+leaderboard snapshot. V29 moved from V18's 17/80 wins and `-12,520.5625` mean
+margin to 35/80 wins and `-1,189.05`; 60/80 paired rows improved, with mean
+paired delta `+11,331.5125`.
 
-Sixteen both-seat comparisons against eight latest V17 public opponent action
-tapes were clean and had zero regression versus V16. A separate 24-game final
-league had positive mean margin against V16, frozen V10, and Wheat. These are
-local frozen and open-loop diagnostics, not a live-score guarantee. Exact
-scope is documented in [`docs/v18-strategy.md`](docs/v18-strategy.md).
+On twelve new seeds in both seats, V29 beat V18 in all 24 closed-loop games at
+mean margin `+18,323.292`. All gate games completed 720 states with
+`DONE/DONE` and empty stderr. V29 still lost 0/8 against `Otter Vibe`; this is
+recorded as a known weakness, not hidden by an aggregate. Exact scope is in
+[`docs/v29-strategy.md`](docs/v29-strategy.md).
 
 ## Quick start
 
@@ -66,15 +67,9 @@ python scripts/package_submission.py
 
 ## Submission
 
-V18 submission `56128972`, message `v18 online-safe residual knn 467d26d`,
-reached `COMPLETE`. The uploaded `main.py` maps to public Git commit
-[`467d26d`](https://github.com/ggmljs/Kaggriculture/commit/467d26d881c6d0232c46152f5c09d3ad2d24fc56),
-which was pushed to `origin/feature/v18-online-safe-residual` before upload.
-Kaggle recorded it at `2026-09-09T18:17:54.090Z` with initial dynamic score
-`600.0`; this is a starting snapshot, not a final strength estimate.
-
-The deterministic reviewed archive is 139,406 bytes with SHA-256
-`c0b00b1ed1f5e430e183bf8ae4beb7aa71e2bd49b841372233a47450a66eddf9`.
+V29 has passed its strategy gate and is being delivered GitHub-first. The
+commit, archive hash, Kaggle submission ID, validation status, and first score
+snapshot will be recorded here immediately after remote delivery.
 
 The package contains only:
 
@@ -89,9 +84,9 @@ submission.tar.gz
 
 ```text
 .
-├── main.py                       # self-contained V18 Kaggle agent
+├── main.py                       # self-contained V29 Kaggle agent
 ├── scripts/                      # evaluation and packaging utilities
-├── docs/v18-strategy.md          # current strategy and evidence boundary
+├── docs/v29-strategy.md          # current strategy and evidence boundary
 ├── tests/                        # deterministic tests and smoke checks
 ├── THIRD_PARTY_NOTICES.md        # provenance and modifications
 ├── AGENTS.md                     # chronological strategy history and rules

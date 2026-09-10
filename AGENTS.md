@@ -563,3 +563,21 @@ at commit `ae0e80bb4a18a40c60ca514f0ce9d8f2a4c338af`.
   `COMPLETE`; the 139,406-byte archive SHA-256 is
   `c0b00b1ed1f5e430e183bf8ae4beb7aa71e2bd49b841372233a47450a66eddf9`.
   Its initial dynamic score was `600.0`.
+### V29: official-strong production reset — 2026-09-10 (current)
+
+- Rejected V19 after a wider official-replay gate exposed severe route
+  overfitting, then evaluated the six V18 route families against four public
+  episodes per available top leaderboard team in both seats. The old families
+  won only 17/80 rows with mean margin `-12,520.5625`.
+- Reconstructed four consistent 8-cow/6-sheep/3-goose production routes from
+  public `cooked` episodes and selected episode `107301740` in a route league.
+  V29 uses that complete route as the default without runtime identity, replay,
+  episode, seed, or future-action lookup.
+- On the same official 80-row gate V29 won 35, improved 60 paired rows, and
+  raised mean margin to `-1,189.05`; the paired mean delta was `+11,331.5125`.
+  It beat several leading teams on mean margin but remained 0/8 with mean
+  `-39,784.625` against Otter Vibe, an explicit unresolved weakness.
+- A fresh twelve-seed both-seat closed-loop league swept V18 24/24 at mean
+  margin `+18,323.292`; all games reached 720 states and `DONE/DONE` with empty
+  stderr. See `docs/v29-strategy.md` and
+  `docs/evidence/v29-official-strong-gate.json` for scope and claim limits.
